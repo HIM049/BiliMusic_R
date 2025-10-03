@@ -37,6 +37,7 @@ dependencies:
   rust_lib_bili_music_r:
     path: rust_builder
   flutter_rust_bridge: 2.11.1
+  flutter_slidable: ^4.0.3
 
 dev_dependencies:
   flutter_test:

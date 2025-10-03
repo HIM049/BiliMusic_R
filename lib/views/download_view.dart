@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class DownloadView extends StatefulWidget {
   const DownloadView({super.key});
@@ -9,8 +10,10 @@ class DownloadView extends StatefulWidget {
 }
 
 class _DownloadView extends State<DownloadView> {
+
   @override
- Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back_rounded)),
@@ -45,20 +48,28 @@ class _DownloadView extends State<DownloadView> {
       body: Center(
         child: ListView(
           children: [
-            ListTile(
-              title: Text("Item 1"),
-              onTap: (){},
-            ),
-            ListTile(
-              title: Text("Item 2"),
-              onTap: (){},
-            ),
-            ListTile(
-              title: Text("Item 3"),
-              onTap: (){},
-            ),
-          ],
-        )
+            Slidable(
+              startActionPane: ActionPane(
+                motion: BehindMotion(), 
+                children: [
+                  SlidableAction(
+                    onPressed: (context) { },
+                    backgroundColor: Colors.redAccent,
+                    icon: Icons.delete,
+                    label: "Delete",
+                  ),
+                  SlidableAction(
+                    onPressed: (context) { },
+                    backgroundColor: colorScheme.secondary,
+                    icon: Icons.edit,
+                    label: "Edit",
+                  )
+                ]
+                ),
+              child: ListTile(title: Text("List item1"),)
+            )
+          ]
+        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: (){},
