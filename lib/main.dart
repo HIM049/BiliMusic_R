@@ -1,5 +1,8 @@
 import 'package:bili_music_r/components/navigation/bottombar.dart';
 import 'package:bili_music_r/components/navigation/sidebar.dart';
+import 'package:bili_music_r/views/download_view.dart';
+import 'package:bili_music_r/views/settings_view.dart';
+import 'package:bili_music_r/views/space_view.dart';
 import 'package:flutter/material.dart';
 import 'package:bili_music_r/src/rust/api/simple.dart';
 import 'package:bili_music_r/src/rust/frb_generated.dart';
@@ -29,8 +32,8 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   int screenIndex = 0;
+  late bool isDesktopMode;
   
   void setIndex(int index) {
     setState(() {
@@ -42,11 +45,11 @@ class _MainPageState extends State<MainPage> {
   Widget _buildPageContent(int index) {
     switch (index) {
       case 0:
-        return const Center(child: Text("Download"));
+        return DownloadView();
       case 1:
-        return const Center(child: Text('Space'));
+        return SpaceView();
       case 2:
-        return const Center(child: Text('Settings'));
+        return SettingsView(); 
       default:
         return const Center(child: Text('Unknown'));
     }
@@ -54,8 +57,11 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    final desktopMode = MediaQuery.of(context).size.width >= 800;
-    if (desktopMode) {
+    setState(() {
+      isDesktopMode = MediaQuery.of(context).size.width >= 600;
+    }); 
+
+    if (isDesktopMode) {
       return LeftNavbarScaffold(index: screenIndex, setIndex: setIndex, buildPageContent: _buildPageContent, );
     } else {
       return BottomNavbarScaffold(index: screenIndex, setIndex: setIndex, buildPageContent: _buildPageContent, );
