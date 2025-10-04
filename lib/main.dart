@@ -6,10 +6,13 @@ import 'package:bili_music_r/views/space_view.dart';
 import 'package:flutter/material.dart';
 import 'package:bili_music_r/src/rust/api/simple.dart';
 import 'package:bili_music_r/src/rust/frb_generated.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 Future<void> main() async {
   await RustLib.init();
-  runApp(const MyApp());
+  runApp(
+    ProviderScope(child: MyApp())
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -42,14 +45,14 @@ class _MainPageState extends State<MainPage> {
   }
 
   // method to choose a page to build
-  Widget _buildPageContent(int index) {
+  Widget _buildPageContent(int index, bool isDesktopMode) {
     switch (index) {
       case 0:
-        return DownloadView();
+        return DownloadView(isDesktopMode: isDesktopMode,);
       case 1:
-        return SpaceView();
+        return SpaceView(isDesktopMode: isDesktopMode,);
       case 2:
-        return SettingsView(); 
+        return SettingsView(isDesktopMode: isDesktopMode,); 
       default:
         return const Center(child: Text('Unknown'));
     }

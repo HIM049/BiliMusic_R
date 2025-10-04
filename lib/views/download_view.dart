@@ -1,9 +1,11 @@
 
+import 'package:bili_music_r/components/slidable_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class DownloadView extends StatefulWidget {
-  const DownloadView({super.key});
+  final bool isDesktopMode;
+  const DownloadView({super.key, required this.isDesktopMode});
 
   @override
   State<DownloadView> createState() => _DownloadView();
@@ -13,15 +15,19 @@ class _DownloadView extends State<DownloadView> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back_rounded)),
         title: const Text("Download"),
         actions: [
-          IconButton.filledTonal(onPressed: () {}, icon: Icon(Icons.add)),
-          FilledButton.tonalIcon(onPressed: () {}, label: Text("Create"), icon: Icon(Icons.add),),
-          PopupMenuButton(itemBuilder: (context) => [
+            
+          widget.isDesktopMode ?
+            FilledButton.tonalIcon(onPressed: () {}, label: Text("Create"), icon: Icon(Icons.add),) : 
+            IconButton.filledTonal(onPressed: () {}, icon: Icon(Icons.add)),
+
+          PopupMenuButton(
+            icon: Icon(Icons.more_vert_rounded),
+            itemBuilder: (context) => [
             const PopupMenuItem(
               value: 'clear',
               child: Row(
@@ -42,40 +48,51 @@ class _DownloadView extends State<DownloadView> {
                 ],
               ),
             ),
-          ],)
+          ])
         ],
       ),
       body: Center(
-        child: ListView(
-          children: [
-            Slidable(
-              startActionPane: ActionPane(
-                motion: BehindMotion(), 
-                children: [
-                  SlidableAction(
-                    onPressed: (context) { },
-                    backgroundColor: Colors.redAccent,
-                    icon: Icons.delete,
-                    label: "Delete",
+        child: SlidableAutoCloseBehavior(
+          child: ListView(
+            children: [
+              SlidableItem(
+                listItemBuilder: (context) => Card(
+                  child: ListTile(
+                    title: Text("MusicTitle"),
+                    subtitle: Text("by KAFU"),
+                    isThreeLine: true,
+                    trailing: IconButton(
+                      icon: Icon(Icons.more_horiz_rounded), 
+                      onPressed: (){ Slidable.of(context)?.openStartActionPane(); },
+                    ),
                   ),
-                  SlidableAction(
-                    onPressed: (context) { },
-                    backgroundColor: colorScheme.secondary,
-                    icon: Icons.edit,
-                    label: "Edit",
-                  )
-                ]
                 ),
-              child: ListTile(title: Text("List item1"),)
-            )
-          ]
-        ),
+                deleteClicked: (context){},
+              ),
+              SlidableItem(
+                listItemBuilder: (context) => Card(
+                  child: ListTile(
+                    title: Text("MusicTitle"),
+                    subtitle: Text("by KAFU"),
+                    isThreeLine: true,
+                    trailing: IconButton(
+                      icon: Icon(Icons.more_horiz_rounded), 
+                      onPressed: (){ Slidable.of(context)?.openStartActionPane(); },
+                    ),
+                  ),
+                ),
+                deleteClicked: (context){},
+              )
+            ]
+          ),
+        )
       ),
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: widget.isDesktopMode ? FloatingActionButton.extended(
         onPressed: (){},
         icon: Icon(Icons.play_arrow_rounded),
         label: const Text("Download"),
-      ),
+      ) : 
+      FloatingActionButton(onPressed: (){}, child: Icon(Icons.play_arrow_rounded),)
     );
   }
 }

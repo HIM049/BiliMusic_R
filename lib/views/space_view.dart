@@ -2,7 +2,8 @@
 import 'package:flutter/material.dart';
 
 class SpaceView extends StatefulWidget {
-  const SpaceView({super.key});
+  final bool isDesktopMode;
+  const SpaceView({super.key, required this.isDesktopMode});
 
   @override
   State<SpaceView> createState() => _SpaceView();

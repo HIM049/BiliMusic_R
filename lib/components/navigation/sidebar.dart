@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 class LeftNavbarScaffold extends StatelessWidget {
   final int index;
   final Function(int) setIndex;
-  final Widget Function(int) buildPageContent;
+  final Widget Function(int, bool) buildPageContent;
+  final isDesktopMode = true;
 
   const LeftNavbarScaffold({
     super.key,
@@ -57,7 +58,7 @@ class LeftNavbarScaffold extends StatelessWidget {
             ),
             const VerticalDivider(thickness: 1, width: 1),
             Expanded(
-              child: buildPageContent(index),
+              child: buildPageContent(index, isDesktopMode),
             ),
           ],
         ),

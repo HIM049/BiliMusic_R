@@ -2,7 +2,8 @@
 import 'package:flutter/material.dart';
 
 class SettingsView extends StatefulWidget {
-  const SettingsView({super.key});
+  final bool isDesktopMode;
+  const SettingsView({super.key, required this.isDesktopMode});
 
   @override
   State<SettingsView> createState() => _SettingsView();

@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 class BottomNavbarScaffold extends StatelessWidget {
   final int index;
   final Function(int) setIndex;
-  final Widget Function(int) buildPageContent;
+  final Widget Function(int, bool) buildPageContent;
+  final isDesktopMode = false;
 
   const BottomNavbarScaffold({
     super.key,
@@ -18,7 +19,7 @@ class BottomNavbarScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: buildPageContent(index),
+        child: buildPageContent(index, isDesktopMode),
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: index,
