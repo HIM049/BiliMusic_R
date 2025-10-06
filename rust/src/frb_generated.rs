@@ -37,7 +37,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.11.1";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1918914929;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -589021706;
 
 // Section: executor
 
@@ -109,6 +109,62 @@ fn wire__crate__api__simple__init_app_impl(
         },
     )
 }
+fn wire__crate__api__simple__query_bili_info_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "query_bili_info",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_input = <String>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| async move {
+                transform_result_sse::<_, ()>(
+                    (move || async move {
+                        let output_ok = Result::<_, ()>::Ok(
+                            crate::api::simple::query_bili_info(api_input).await,
+                        )?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
+
+// Section: static_checks
+
+#[allow(clippy::unnecessary_literal_unwrap)]
+const _: fn() = || {
+    let VideoInfoFlutter = None::<crate::api::simple::VideoInfoFlutter>.unwrap();
+    let _: i64 = VideoInfoFlutter.aid;
+    let _: String = VideoInfoFlutter.bvid;
+    let _: i64 = VideoInfoFlutter.cid;
+    let _: String = VideoInfoFlutter.title;
+    let _: String = VideoInfoFlutter.cover;
+    let _: String = VideoInfoFlutter.author;
+    let _: i64 = VideoInfoFlutter.count;
+    let _: String = VideoInfoFlutter.tname;
+    let _: String = VideoInfoFlutter.tname_v2;
+    let _: i64 = VideoInfoFlutter.pubdate;
+    let _: String = VideoInfoFlutter.desc;
+};
 
 // Section: dart2rust
 
@@ -117,6 +173,13 @@ impl SseDecode for String {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut inner = <Vec<u8>>::sse_decode(deserializer);
         return String::from_utf8(inner).unwrap();
+    }
+}
+
+impl SseDecode for i64 {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        deserializer.cursor.read_i64::<NativeEndian>().unwrap()
     }
 }
 
@@ -132,6 +195,19 @@ impl SseDecode for Vec<u8> {
     }
 }
 
+impl SseDecode for Option<crate::api::simple::VideoInfoFlutter> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<crate::api::simple::VideoInfoFlutter>::sse_decode(
+                deserializer,
+            ));
+        } else {
+            return None;
+        }
+    }
+}
+
 impl SseDecode for u8 {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -142,6 +218,36 @@ impl SseDecode for u8 {
 impl SseDecode for () {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {}
+}
+
+impl SseDecode for crate::api::simple::VideoInfoFlutter {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_aid = <i64>::sse_decode(deserializer);
+        let mut var_bvid = <String>::sse_decode(deserializer);
+        let mut var_cid = <i64>::sse_decode(deserializer);
+        let mut var_title = <String>::sse_decode(deserializer);
+        let mut var_cover = <String>::sse_decode(deserializer);
+        let mut var_author = <String>::sse_decode(deserializer);
+        let mut var_count = <i64>::sse_decode(deserializer);
+        let mut var_tname = <String>::sse_decode(deserializer);
+        let mut var_tnameV2 = <String>::sse_decode(deserializer);
+        let mut var_pubdate = <i64>::sse_decode(deserializer);
+        let mut var_desc = <String>::sse_decode(deserializer);
+        return crate::api::simple::VideoInfoFlutter {
+            aid: var_aid,
+            bvid: var_bvid,
+            cid: var_cid,
+            title: var_title,
+            cover: var_cover,
+            author: var_author,
+            count: var_count,
+            tname: var_tname,
+            tname_v2: var_tnameV2,
+            pubdate: var_pubdate,
+            desc: var_desc,
+        };
+    }
 }
 
 impl SseDecode for i32 {
@@ -168,6 +274,7 @@ fn pde_ffi_dispatcher_primary_impl(
     // Codec=Pde (Serialization + dispatch), see doc to use other codecs
     match func_id {
         2 => wire__crate__api__simple__init_app_impl(port, ptr, rust_vec_len, data_len),
+        3 => wire__crate__api__simple__query_bili_info_impl(port, ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }
@@ -187,10 +294,48 @@ fn pde_ffi_dispatcher_sync_impl(
 
 // Section: rust2dart
 
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::simple::VideoInfoFlutter> {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.0.aid.into_into_dart().into_dart(),
+            self.0.bvid.into_into_dart().into_dart(),
+            self.0.cid.into_into_dart().into_dart(),
+            self.0.title.into_into_dart().into_dart(),
+            self.0.cover.into_into_dart().into_dart(),
+            self.0.author.into_into_dart().into_dart(),
+            self.0.count.into_into_dart().into_dart(),
+            self.0.tname.into_into_dart().into_dart(),
+            self.0.tname_v2.into_into_dart().into_dart(),
+            self.0.pubdate.into_into_dart().into_dart(),
+            self.0.desc.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for FrbWrapper<crate::api::simple::VideoInfoFlutter>
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::simple::VideoInfoFlutter>>
+    for crate::api::simple::VideoInfoFlutter
+{
+    fn into_into_dart(self) -> FrbWrapper<crate::api::simple::VideoInfoFlutter> {
+        self.into()
+    }
+}
+
 impl SseEncode for String {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <Vec<u8>>::sse_encode(self.into_bytes(), serializer);
+    }
+}
+
+impl SseEncode for i64 {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        serializer.cursor.write_i64::<NativeEndian>(self).unwrap();
     }
 }
 
@@ -200,6 +345,16 @@ impl SseEncode for Vec<u8> {
         <i32>::sse_encode(self.len() as _, serializer);
         for item in self {
             <u8>::sse_encode(item, serializer);
+        }
+    }
+}
+
+impl SseEncode for Option<crate::api::simple::VideoInfoFlutter> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <crate::api::simple::VideoInfoFlutter>::sse_encode(value, serializer);
         }
     }
 }
@@ -214,6 +369,23 @@ impl SseEncode for u8 {
 impl SseEncode for () {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {}
+}
+
+impl SseEncode for crate::api::simple::VideoInfoFlutter {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i64>::sse_encode(self.aid, serializer);
+        <String>::sse_encode(self.bvid, serializer);
+        <i64>::sse_encode(self.cid, serializer);
+        <String>::sse_encode(self.title, serializer);
+        <String>::sse_encode(self.cover, serializer);
+        <String>::sse_encode(self.author, serializer);
+        <i64>::sse_encode(self.count, serializer);
+        <String>::sse_encode(self.tname, serializer);
+        <String>::sse_encode(self.tname_v2, serializer);
+        <i64>::sse_encode(self.pubdate, serializer);
+        <String>::sse_encode(self.desc, serializer);
+    }
 }
 
 impl SseEncode for i32 {
