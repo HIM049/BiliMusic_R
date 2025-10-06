@@ -27,7 +27,6 @@ pub struct BiliInfo {
     pub cid: i64,
     pub title: String,
     pub pic: String,
-    pub author: String,
     pub videos: i64,      // Patrs count
     pub tid: i64,         // 分区信息
     pub tid_v2: i64,      // 分区信息
@@ -46,7 +45,6 @@ impl BiliInfo {
                 cid: json["cid"].as_i64()?,
                 title: json["title"].as_str()?.to_string(),
                 pic: json["pic"].as_str()?.to_string(),
-                author: json["title"].as_str()?.to_string(),
                 videos: json["videos"].as_i64()?,
                 tid: json["tid"].as_i64()?,
                 tid_v2: json["tid_v2"].as_i64()?,

@@ -99,7 +99,6 @@ async fn get_video_details(
             "Failed when request: {}",
             json_resp["message"].as_str().unwrap()
         )));
-        
     }
 
     // Write data into struct
