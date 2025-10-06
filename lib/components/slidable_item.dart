@@ -8,7 +8,7 @@ class SlidableItem extends StatelessWidget {
   const SlidableItem({
     super.key, 
     required this.listItemBuilder,
-    required this. deleteClicked,
+    required this.deleteClicked,
   });
 
   @override
