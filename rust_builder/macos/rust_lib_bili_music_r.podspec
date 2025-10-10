@@ -39,6 +39,9 @@ A new Flutter FFI plugin project.
     'DEFINES_MODULE' => 'YES',
     # Flutter.framework does not contain a i386 slice.
     'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386',
-    'OTHER_LDFLAGS' => '-force_load ${BUILT_PRODUCTS_DIR}/librust_lib_bili_music_r.a',
+    # 'OTHER_LDFLAGS' => '-force_load ${BUILT_PRODUCTS_DIR}/librust_lib_bili_music_r.a',
+    # 'OTHER_LDFLAGS' => '-force_load ${BUILT_PRODUCTS_DIR}/librust_lib.a -framework SystemConfiguration',
+    # 'OTHER_LDFLAGS' => '-force_load ${BUILT_PRODUCTS_DIR}/../rust/debug/librust_lib_bili_music_r.a -framework SystemConfiguration',
+    'OTHER_LDFLAGS' => '-force_load /Users/him049/Documents/Coding/bili_music_r/rust/target/debug/librust_lib_bili_music_r.a -framework SystemConfiguration',
   }
 end
