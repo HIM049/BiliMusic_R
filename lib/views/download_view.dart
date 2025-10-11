@@ -1,11 +1,11 @@
 
-import 'package:bili_music_r/views/download_views.dart/creat_task_view.dart';
+import 'package:bili_music_r/views/download_views.dart/query_task_view.dart';
 import 'package:bili_music_r/views/download_views.dart/queue_view.dart';
 import 'package:flutter/material.dart';
 
 class DownloadView extends StatefulWidget {
   final bool isDesktopMode;
-  DownloadView({super.key, required this.isDesktopMode});
+  const DownloadView({super.key, required this.isDesktopMode});
 
   @override
   State<DownloadView> createState() => _DownloadView();
@@ -21,7 +21,7 @@ class _DownloadView extends State<DownloadView> {
         isDesktopMode: widget.isDesktopMode,
         onCreatTaskClicked: () => setState(() { pageIndex = 1; }),
       );
-      case 1: return CreatTaskView(
+      case 1: return QueryTaskView(
         isDesktopMode: widget.isDesktopMode,
         onBackClicked: () => setState(() { pageIndex = 0; }),
       );

@@ -15,7 +15,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   FlutterMacOS: d0db08ddef1a9af05a5ec4b724367152bb0500b1
-  rust_lib_bili_music_r: 118febc765dcde3638c4d35ef7d9f7ee46597113
+  rust_lib_bili_music_r: 0d747634ed343b3b6c6f78652831d785c5ee61a7
 
 PODFILE CHECKSUM: 54d867c82ac51cbd61b565781b9fada492027009
 

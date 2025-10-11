@@ -30,6 +30,7 @@ class LeftNavbarScaffold extends StatelessWidget {
                 child: NavigationDrawer(
                   onDestinationSelected: setIndex,
                   selectedIndex: index,
+                  backgroundColor: Colors.transparent,
                   children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.fromLTRB(28, 16, 16, 10),
