@@ -1,4 +1,5 @@
-
+import 'package:intl/intl.dart';
+import 'package:bili_music_r/components/extend_card.dart';
 import 'package:flutter/material.dart';
 import 'package:bili_music_r/src/rust/api/simple.dart';
 
@@ -29,6 +30,11 @@ class _CreatTaskView extends State<QueryTaskView> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
+    String formatUnixTime(int unixTime) {
+      var date = DateTime.fromMillisecondsSinceEpoch(unixTime * 1000);
+      return DateFormat('yy-MM-dd HH:mm').format(date);
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -67,7 +73,7 @@ class _CreatTaskView extends State<QueryTaskView> {
           padding: EdgeInsets.symmetric(horizontal: 16.0),
           child: SizedBox(
             width: 400,
-            height: 300,
+            // height: 300,
             child: Column(
               children: [
                 Align(
@@ -75,7 +81,11 @@ class _CreatTaskView extends State<QueryTaskView> {
                   child: Text("Query", style: theme.textTheme.headlineLarge,),
                 ),
 
+                const SizedBox(height: 8.0,),
+
+                // Search zone
                 Container(
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
                   child: Column(
                     children: [
                       SearchBar(
@@ -89,68 +99,27 @@ class _CreatTaskView extends State<QueryTaskView> {
                   )
                 ),
 
-                if (result != null) Card(
-                  clipBehavior: Clip.antiAlias,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  // color: Theme.of(context).colorScheme.surfaceContainerHighest,
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      final maxWidth = constraints.maxWidth.isFinite
-                          ? constraints.maxWidth
-                          : MediaQuery.of(context).size.width;
-                      final imageSize = (maxWidth * 0.28).clamp(80.0, 160.0);
+                // if (result != null) MiniCard(
+                //   title: result!.title, 
+                //   author: result!.author,
+                //   videos: result!.count, 
+                //   coverUrl: result!.cover
+                // ),
 
-                      return SizedBox(
-                        height: imageSize,
-                        child: Row(
-                          children: [
-                            ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(16),
-                                bottomLeft: Radius.circular(16),
-                              ),
-                              child: SizedBox(
-                                width: imageSize,
-                                height: imageSize,
-                                child: Image.network(
-                                  result!.cover,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(12.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      result!.title,
-                                      style: Theme.of(context).textTheme.titleMedium,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      "Author: ${result!.author}",
-                                      style: Theme.of(context).textTheme.bodyMedium,
-                                      // maxLines: 3,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
+                // const SizedBox(height: 8.0,),
+
+                // Result card
+                if (result != null) ExtendCard(
+                  title: result!.title, 
+                  author: result!.author, 
+                  videos: result!.count,
+                  coverUrl: result!.cover,
+                  onAddToList: () { },
+                  infoList: [
+                    {"Type": result!.tname}, {"PubAt": formatUnixTime(result!.pubdate)},
+                    {"BVID": result!.bvid}, {"AVID": result!.aid.toString()},
+                  ],
                 )
-
               ],
             )
           ),
