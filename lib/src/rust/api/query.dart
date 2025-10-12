@@ -8,11 +8,8 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
 // These functions are ignored because they are not marked as `pub`: `from_video`
 
-String greet({required String name}) =>
-    RustLib.instance.api.crateApiSimpleGreet(name: name);
-
 Future<VideoInfoFlutter?> queryBiliInfo({required String input}) =>
-    RustLib.instance.api.crateApiSimpleQueryBiliInfo(input: input);
+    RustLib.instance.api.crateApiQueryQueryBiliInfo(input: input);
 
 class VideoInfoFlutter {
   final PlatformInt64 aid;

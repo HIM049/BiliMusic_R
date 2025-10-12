@@ -1,6 +1,5 @@
+use bilibili::modules::{Video, VideoPart};
 use serde::{Deserialize, Serialize};
-
-use crate::modules::{Video, VideoPart};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum TaskType {
@@ -13,19 +12,21 @@ pub enum TaskType {
 pub struct Task {
     pub task_type: TaskType,
     pub video: Video,
-    pub part_data: Option<VideoPart>,
+    pub part_id: usize,
+    pub part_data: VideoPart,
 }
 
 impl Task {
     pub fn from_video(video: Video) -> Vec<Self> {
         let mut task_list: Vec<Self> = vec![];
         // create jobs for every part
-        for part in video.parts.clone() {
+        for (index, part) in video.parts.clone().iter().enumerate() {
             task_list.push( 
                 Self { 
                     task_type: TaskType::Video,
                     video: video.clone(),
-                    part_data: Some(part),
+                    part_id: index,
+                    part_data: part.clone(),
                 }
             );
         }
@@ -42,11 +43,11 @@ pub struct Meta {
     // singer, from ...
 }
 
-impl Meta {
-    pub fn from_video(video: Video) -> Option<Self> {
-        None
-    }
-}
+// impl Meta {
+//     pub fn from_video(video: Video) -> Option<Self> {
+//         None
+//     }
+// }
 
 // impl Meta {
 //     pub fn from_json(json: Value) -> Option<Self> {

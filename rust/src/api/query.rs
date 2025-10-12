@@ -1,9 +1,7 @@
 use bilibili::modules::Video;
 
-#[flutter_rust_bridge::frb(sync)] // Synchronous mode for simplicity of the demo
-pub fn greet(name: String) -> String {
-    format!("Hello, {name}!")
-}
+use crate::app_state::APP_STATE;
+
 
 #[flutter_rust_bridge::frb(init)]
 pub fn init_app() {
@@ -11,9 +9,13 @@ pub fn init_app() {
     flutter_rust_bridge::setup_default_user_utils();
 }
 
-// #[flutter_rust_bridge::frb(sync = false)]
+// #[flutter_rust_bridge::frb(sync)] // Synchronous mode
+// Query video info, set current item
 pub async fn query_bili_info(input: String) -> Option<VideoInfoFlutter> {
     if let Ok(video) = Video::from_bvid(input).await {
+        let mut app_state = APP_STATE.lock().await;
+        app_state.current_item = crate::app_state::Items::Video(video.clone());
+
         Some(VideoInfoFlutter::from_video(video))
     } else {
         None

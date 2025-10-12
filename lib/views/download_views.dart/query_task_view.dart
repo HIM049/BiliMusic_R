@@ -1,15 +1,18 @@
+import 'package:bili_music_r/src/rust/api/query.dart';
+import 'package:bili_music_r/src/rust/api/task_handler.dart';
 import 'package:intl/intl.dart';
 import 'package:bili_music_r/components/extend_card.dart';
 import 'package:flutter/material.dart';
-import 'package:bili_music_r/src/rust/api/simple.dart';
 
 class QueryTaskView extends StatefulWidget {
   final bool isDesktopMode;
   final Function() onBackClicked;
+  final Function() onAddListClicked;
   const QueryTaskView({
     super.key, 
     required this.isDesktopMode,
     required this.onBackClicked,
+    required this.onAddListClicked,
   });
 
   @override
@@ -19,12 +22,38 @@ class QueryTaskView extends StatefulWidget {
 class _CreatTaskView extends State<QueryTaskView> {
   VideoInfoFlutter? result;
 
-  Future<void> callRustAsync(String bvid) async {
-    final video = await queryBiliInfo(input: bvid);
+  // query
+  Future<void> query(String id) async {
+    if (id.isEmpty) return;
+    final video = await queryBiliInfo(input: id);
     setState(() {
       result = video;
     });
     // TODO: Loading animate, error check
+  }
+
+  Future<void> onAddToList() async {
+    try {
+      await createTempQueueFromCurrent();
+    } catch(error) {
+      showSnackBar("Something wrong: $error");
+    }
+    widget.onAddListClicked();
+  }
+
+  void showSnackBar(String msg) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.floating,
+        content: Text(msg),
+        // action: SnackBarAction(
+        //   label: 'Action',
+        //   onPressed: () {
+        //     // Code to execute.
+        //   },
+        // ),
+      ),
+    );
   }
 
   @override
@@ -93,7 +122,7 @@ class _CreatTaskView extends State<QueryTaskView> {
                         // textStyle: WidgetStatePropertyAll(TextStyle(fontSize: 16)),
                         elevation: WidgetStatePropertyAll(0),
                         leading: const Icon(Icons.search),
-                        onSubmitted: (value) { callRustAsync(value); },
+                        onSubmitted: (value) { query(value); },
                       ),
                     ],
                   )
@@ -114,7 +143,7 @@ class _CreatTaskView extends State<QueryTaskView> {
                   author: result!.author, 
                   videos: result!.count,
                   coverUrl: result!.cover,
-                  onAddToList: () { },
+                  onAddToList: onAddToList,
                   infoList: [
                     {"Type": result!.tname}, {"PubAt": formatUnixTime(result!.pubdate)},
                     {"BVID": result!.bvid}, {"AVID": result!.aid.toString()},

@@ -4,7 +4,6 @@ import 'package:bili_music_r/views/download_view.dart';
 import 'package:bili_music_r/views/settings_view.dart';
 import 'package:bili_music_r/views/space_view.dart';
 import 'package:flutter/material.dart';
-import 'package:bili_music_r/src/rust/api/simple.dart';
 import 'package:bili_music_r/src/rust/frb_generated.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
