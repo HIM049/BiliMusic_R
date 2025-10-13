@@ -21,10 +21,14 @@ class QueryTaskView extends StatefulWidget {
 
 class _CreatTaskView extends State<QueryTaskView> {
   VideoInfoFlutter? result;
+  String inputText = "";
 
   // query
   Future<void> query(String id) async {
-    if (id.isEmpty) return;
+    if (id.isEmpty) {
+      showSnackBar("Cannot query with blank");
+      return;
+    }
     final video = await queryBiliInfo(input: id);
     setState(() {
       result = video;
@@ -120,8 +124,11 @@ class _CreatTaskView extends State<QueryTaskView> {
                       SearchBar(
                         hintText: 'Type your video id',
                         // textStyle: WidgetStatePropertyAll(TextStyle(fontSize: 16)),
+                        trailing: [IconButton(onPressed: (){query(inputText);}, icon: Icon(Icons.arrow_forward))],
                         elevation: WidgetStatePropertyAll(0),
-                        leading: const Icon(Icons.search),
+                        autoFocus: true,
+                        leading: Icon(Icons.search),
+                        onChanged: (value) => setState(() { inputText = value; }),
                         onSubmitted: (value) { query(value); },
                       ),
                     ],

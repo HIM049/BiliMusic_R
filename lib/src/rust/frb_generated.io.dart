@@ -45,10 +45,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   FilterOptions dco_decode_box_autoadd_filter_options(dynamic raw);
 
   @protected
-  VideoInfoFlutter dco_decode_box_autoadd_video_info_flutter(dynamic raw);
+  FilterOptions dco_decode_filter_options(dynamic raw);
 
   @protected
-  FilterOptions dco_decode_filter_options(dynamic raw);
+  int dco_decode_i_32(dynamic raw);
 
   @protected
   PlatformInt64 dco_decode_i_64(dynamic raw);
@@ -64,9 +64,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   List<TempItem> dco_decode_list_temp_item(dynamic raw);
-
-  @protected
-  VideoInfoFlutter? dco_decode_opt_box_autoadd_video_info_flutter(dynamic raw);
 
   @protected
   TempItem dco_decode_temp_item(dynamic raw);
@@ -107,12 +104,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
-  VideoInfoFlutter sse_decode_box_autoadd_video_info_flutter(
-    SseDeserializer deserializer,
-  );
+  FilterOptions sse_decode_filter_options(SseDeserializer deserializer);
 
   @protected
-  FilterOptions sse_decode_filter_options(SseDeserializer deserializer);
+  int sse_decode_i_32(SseDeserializer deserializer);
 
   @protected
   PlatformInt64 sse_decode_i_64(SseDeserializer deserializer);
@@ -130,11 +125,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   List<TempItem> sse_decode_list_temp_item(SseDeserializer deserializer);
 
   @protected
-  VideoInfoFlutter? sse_decode_opt_box_autoadd_video_info_flutter(
-    SseDeserializer deserializer,
-  );
-
-  @protected
   TempItem sse_decode_temp_item(SseDeserializer deserializer);
 
   @protected
@@ -148,9 +138,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   VideoInfoFlutter sse_decode_video_info_flutter(SseDeserializer deserializer);
-
-  @protected
-  int sse_decode_i_32(SseDeserializer deserializer);
 
   @protected
   void
@@ -179,13 +166,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
-  void sse_encode_box_autoadd_video_info_flutter(
-    VideoInfoFlutter self,
-    SseSerializer serializer,
-  );
+  void sse_encode_filter_options(FilterOptions self, SseSerializer serializer);
 
   @protected
-  void sse_encode_filter_options(FilterOptions self, SseSerializer serializer);
+  void sse_encode_i_32(int self, SseSerializer serializer);
 
   @protected
   void sse_encode_i_64(PlatformInt64 self, SseSerializer serializer);
@@ -207,12 +191,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_list_temp_item(List<TempItem> self, SseSerializer serializer);
 
   @protected
-  void sse_encode_opt_box_autoadd_video_info_flutter(
-    VideoInfoFlutter? self,
-    SseSerializer serializer,
-  );
-
-  @protected
   void sse_encode_temp_item(TempItem self, SseSerializer serializer);
 
   @protected
@@ -229,9 +207,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
     VideoInfoFlutter self,
     SseSerializer serializer,
   );
-
-  @protected
-  void sse_encode_i_32(int self, SseSerializer serializer);
 }
 
 // Section: wire_class

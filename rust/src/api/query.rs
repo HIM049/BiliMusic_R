@@ -11,14 +11,14 @@ pub fn init_app() {
 
 // #[flutter_rust_bridge::frb(sync)] // Synchronous mode
 // Query video info, set current item
-pub async fn query_bili_info(input: String) -> Option<VideoInfoFlutter> {
+pub async fn query_bili_info(input: String) -> Result<VideoInfoFlutter, String> {
     if let Ok(video) = Video::from_bvid(input).await {
         let mut app_state = APP_STATE.lock().await;
         app_state.current_item = crate::app_state::Items::Video(video.clone());
 
-        Some(VideoInfoFlutter::from_video(video))
+        Ok(VideoInfoFlutter::from_video(video))
     } else {
-        None
+        Err("Failed to query".into())
     }
 }
 

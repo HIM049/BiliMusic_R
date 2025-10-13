@@ -22,11 +22,14 @@ class _CreatTaskView extends State<EditTempView> {
   VideoInfoFlutter? result;
   bool isWithParts = true;
   List<TempItem> tempQueue = [];
-  RangeValues range = RangeValues(0, 1);
+  RangeValues range = RangeValues(1, 1);
+  int tempLength = 2;
 
   Future<void> addToDownload() async {
     await creatTasksFromTemp(options: FilterOptions(
         isWithParts: isWithParts, 
+        from: range.start.toInt(),
+        to: range.end.toInt(),
       ));
   }
 
@@ -34,17 +37,29 @@ class _CreatTaskView extends State<EditTempView> {
   void initState() {
     super.initState();
 
-    getQueue();
+    initValueRange().then((_) {
+      getQueue();
+    });
   }
 
+  Future<void> initValueRange() async {
+    final length = await getTempQueueLength();
+    setState(() {
+      tempLength = length;
+      range = RangeValues(1, tempLength.toDouble());
+    });
+  }
+
+
   Future<void> getQueue() async {
+    print("${range.start.toInt()} , ${range.end.toInt()}, $isWithParts");
     final newQueue = await getTempQueue(options: FilterOptions(
         isWithParts: isWithParts, 
+        from: range.start.toInt()-1,
+        to: range.end.toInt()-1,
       ));
     setState(() {
-      range = RangeValues(0, 1);
       tempQueue = newQueue;
-      range = RangeValues(0, newQueue.length.toDouble());
     });
   }
 
@@ -129,9 +144,9 @@ class _CreatTaskView extends State<EditTempView> {
                         Expanded(
                           child: RangeSlider(
                             values: range,
-                            divisions: queueLength,
-                            min: 0,
-                            max: queueLength.toDouble(),
+                            divisions: tempLength-1,
+                            min: 1,
+                            max: tempLength.toDouble(),
                             onChanged: (RangeValues values) {
                               setState(() { range = values; });
                               getQueue();

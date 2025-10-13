@@ -8,9 +8,13 @@ import '../task_modules.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
 // These functions are ignored because they are not marked as `pub`: `from_task`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `fmt`
 
 Future<void> createTempQueueFromCurrent() =>
     RustLib.instance.api.crateApiTaskHandlerCreateTempQueueFromCurrent();
+
+Future<int> getTempQueueLength() =>
+    RustLib.instance.api.crateApiTaskHandlerGetTempQueueLength();
 
 Future<List<TempItem>> getTempQueue({required FilterOptions options}) =>
     RustLib.instance.api.crateApiTaskHandlerGetTempQueue(options: options);
@@ -28,20 +32,41 @@ Future<List<Task>> taskQueueFilter({
   options: options,
 );
 
+Future<List<Task>> filterByParts({required List<Task> queue}) =>
+    RustLib.instance.api.crateApiTaskHandlerFilterByParts(queue: queue);
+
+Future<List<Task>> filterByRange({
+  required List<Task> queue,
+  required BigInt from,
+  required BigInt to,
+}) => RustLib.instance.api.crateApiTaskHandlerFilterByRange(
+  queue: queue,
+  from: from,
+  to: to,
+);
+
 class FilterOptions {
   final bool isWithParts;
+  final int from;
+  final int to;
 
-  const FilterOptions({required this.isWithParts});
+  const FilterOptions({
+    required this.isWithParts,
+    required this.from,
+    required this.to,
+  });
 
   @override
-  int get hashCode => isWithParts.hashCode;
+  int get hashCode => isWithParts.hashCode ^ from.hashCode ^ to.hashCode;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is FilterOptions &&
           runtimeType == other.runtimeType &&
-          isWithParts == other.isWithParts;
+          isWithParts == other.isWithParts &&
+          from == other.from &&
+          to == other.to;
 }
 
 class TempItem {

@@ -68,7 +68,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => -481476283;
+  int get rustContentHash => 815249113;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -85,13 +85,25 @@ abstract class RustLibApi extends BaseApi {
 
   Future<void> crateApiTaskHandlerCreateTempQueueFromCurrent();
 
+  Future<List<Task>> crateApiTaskHandlerFilterByParts({
+    required List<Task> queue,
+  });
+
+  Future<List<Task>> crateApiTaskHandlerFilterByRange({
+    required List<Task> queue,
+    required BigInt from,
+    required BigInt to,
+  });
+
   Future<List<TempItem>> crateApiTaskHandlerGetTempQueue({
     required FilterOptions options,
   });
 
+  Future<int> crateApiTaskHandlerGetTempQueueLength();
+
   Future<void> crateApiQueryInitApp();
 
-  Future<VideoInfoFlutter?> crateApiQueryQueryBiliInfo({required String input});
+  Future<VideoInfoFlutter> crateApiQueryQueryBiliInfo({required String input});
 
   Future<List<Task>> crateApiTaskHandlerTaskQueueFilter({
     required List<Task> queue,
@@ -177,6 +189,81 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Future<List<Task>> crateApiTaskHandlerFilterByParts({
+    required List<Task> queue,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask(
+            queue,
+            serializer,
+          );
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 3,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiTaskHandlerFilterByPartsConstMeta,
+        argValues: [queue],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiTaskHandlerFilterByPartsConstMeta =>
+      const TaskConstMeta(debugName: "filter_by_parts", argNames: ["queue"]);
+
+  @override
+  Future<List<Task>> crateApiTaskHandlerFilterByRange({
+    required List<Task> queue,
+    required BigInt from,
+    required BigInt to,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask(
+            queue,
+            serializer,
+          );
+          sse_encode_usize(from, serializer);
+          sse_encode_usize(to, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 4,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiTaskHandlerFilterByRangeConstMeta,
+        argValues: [queue, from, to],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiTaskHandlerFilterByRangeConstMeta =>
+      const TaskConstMeta(
+        debugName: "filter_by_range",
+        argNames: ["queue", "from", "to"],
+      );
+
+  @override
   Future<List<TempItem>> crateApiTaskHandlerGetTempQueue({
     required FilterOptions options,
   }) {
@@ -188,7 +275,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 3,
+            funcId: 5,
             port: port_,
           );
         },
@@ -207,6 +294,33 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       const TaskConstMeta(debugName: "get_temp_queue", argNames: ["options"]);
 
   @override
+  Future<int> crateApiTaskHandlerGetTempQueueLength() {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 6,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_i_32,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiTaskHandlerGetTempQueueLengthConstMeta,
+        argValues: [],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiTaskHandlerGetTempQueueLengthConstMeta =>
+      const TaskConstMeta(debugName: "get_temp_queue_length", argNames: []);
+
+  @override
   Future<void> crateApiQueryInitApp() {
     return handler.executeNormal(
       NormalTask(
@@ -215,7 +329,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 4,
+            funcId: 7,
             port: port_,
           );
         },
@@ -234,9 +348,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       const TaskConstMeta(debugName: "init_app", argNames: []);
 
   @override
-  Future<VideoInfoFlutter?> crateApiQueryQueryBiliInfo({
-    required String input,
-  }) {
+  Future<VideoInfoFlutter> crateApiQueryQueryBiliInfo({required String input}) {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
@@ -245,13 +357,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 5,
+            funcId: 8,
             port: port_,
           );
         },
         codec: SseCodec(
-          decodeSuccessData: sse_decode_opt_box_autoadd_video_info_flutter,
-          decodeErrorData: null,
+          decodeSuccessData: sse_decode_video_info_flutter,
+          decodeErrorData: sse_decode_String,
         ),
         constMeta: kCrateApiQueryQueryBiliInfoConstMeta,
         argValues: [input],
@@ -280,7 +392,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 6,
+            funcId: 9,
             port: port_,
           );
         },
@@ -347,18 +459,22 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  VideoInfoFlutter dco_decode_box_autoadd_video_info_flutter(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return dco_decode_video_info_flutter(raw);
-  }
-
-  @protected
   FilterOptions dco_decode_filter_options(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 1)
-      throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
-    return FilterOptions(isWithParts: dco_decode_bool(arr[0]));
+    if (arr.length != 3)
+      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
+    return FilterOptions(
+      isWithParts: dco_decode_bool(arr[0]),
+      from: dco_decode_i_32(arr[1]),
+      to: dco_decode_i_32(arr[2]),
+    );
+  }
+
+  @protected
+  int dco_decode_i_32(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw as int;
   }
 
   @protected
@@ -390,12 +506,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   List<TempItem> dco_decode_list_temp_item(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return (raw as List<dynamic>).map(dco_decode_temp_item).toList();
-  }
-
-  @protected
-  VideoInfoFlutter? dco_decode_opt_box_autoadd_video_info_flutter(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return raw == null ? null : dco_decode_box_autoadd_video_info_flutter(raw);
   }
 
   @protected
@@ -496,18 +606,22 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  VideoInfoFlutter sse_decode_box_autoadd_video_info_flutter(
-    SseDeserializer deserializer,
-  ) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return (sse_decode_video_info_flutter(deserializer));
-  }
-
-  @protected
   FilterOptions sse_decode_filter_options(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_isWithParts = sse_decode_bool(deserializer);
-    return FilterOptions(isWithParts: var_isWithParts);
+    var var_from = sse_decode_i_32(deserializer);
+    var var_to = sse_decode_i_32(deserializer);
+    return FilterOptions(
+      isWithParts: var_isWithParts,
+      from: var_from,
+      to: var_to,
+    );
+  }
+
+  @protected
+  int sse_decode_i_32(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return deserializer.buffer.getInt32();
   }
 
   @protected
@@ -552,19 +666,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       ans_.add(sse_decode_temp_item(deserializer));
     }
     return ans_;
-  }
-
-  @protected
-  VideoInfoFlutter? sse_decode_opt_box_autoadd_video_info_flutter(
-    SseDeserializer deserializer,
-  ) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-
-    if (sse_decode_bool(deserializer)) {
-      return (sse_decode_box_autoadd_video_info_flutter(deserializer));
-    } else {
-      return null;
-    }
   }
 
   @protected
@@ -627,12 +728,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  int sse_decode_i_32(SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return deserializer.buffer.getInt32();
-  }
-
-  @protected
   void
   sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask(
     Task self,
@@ -680,18 +775,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_box_autoadd_video_info_flutter(
-    VideoInfoFlutter self,
-    SseSerializer serializer,
-  ) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_video_info_flutter(self, serializer);
-  }
-
-  @protected
   void sse_encode_filter_options(FilterOptions self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_bool(self.isWithParts, serializer);
+    sse_encode_i_32(self.from, serializer);
+    sse_encode_i_32(self.to, serializer);
+  }
+
+  @protected
+  void sse_encode_i_32(int self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    serializer.buffer.putInt32(self);
   }
 
   @protected
@@ -739,19 +833,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_opt_box_autoadd_video_info_flutter(
-    VideoInfoFlutter? self,
-    SseSerializer serializer,
-  ) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-
-    sse_encode_bool(self != null, serializer);
-    if (self != null) {
-      sse_encode_box_autoadd_video_info_flutter(self, serializer);
-    }
-  }
-
-  @protected
   void sse_encode_temp_item(TempItem self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.title, serializer);
@@ -793,12 +874,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_String(self.tnameV2, serializer);
     sse_encode_i_64(self.pubdate, serializer);
     sse_encode_String(self.desc, serializer);
-  }
-
-  @protected
-  void sse_encode_i_32(int self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    serializer.buffer.putInt32(self);
   }
 }
 
