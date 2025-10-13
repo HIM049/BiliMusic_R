@@ -4,13 +4,11 @@ class MiniCard extends StatelessWidget {
   final String title;
   final String coverUrl;
   final List<String> labels;
-  final Function() onAddToList;
 
   const MiniCard({
     super.key,
     required this.title,
     required this.coverUrl,
-    required this.onAddToList,
     this.labels = const [],
   });
 

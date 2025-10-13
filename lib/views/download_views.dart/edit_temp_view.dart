@@ -25,14 +25,18 @@ class _CreatTaskView extends State<EditTempView> {
   RangeValues range = RangeValues(1, 1);
   int tempLength = 2;
 
+  // add temp queue to download queue with filter
   Future<void> addToDownload() async {
     await creatTasksFromTemp(options: FilterOptions(
-        isWithParts: isWithParts, 
-        from: range.start.toInt(),
-        to: range.end.toInt(),
-      ));
+      isWithParts: isWithParts, 
+      from: range.start.toInt(),
+      to: range.end.toInt(),
+    ));
+    
+    widget.onAddToDownload();
   }
 
+  // on page init
   @override
   void initState() {
     super.initState();
@@ -42,6 +46,7 @@ class _CreatTaskView extends State<EditTempView> {
     });
   }
 
+  // init values for range filter
   Future<void> initValueRange() async {
     final length = await getTempQueueLength();
     setState(() {
@@ -50,9 +55,8 @@ class _CreatTaskView extends State<EditTempView> {
     });
   }
 
-
+  // get temp queue with filter
   Future<void> getQueue() async {
-    print("${range.start.toInt()} , ${range.end.toInt()}, $isWithParts");
     final newQueue = await getTempQueue(options: FilterOptions(
         isWithParts: isWithParts, 
         from: range.start.toInt()-1,
@@ -66,37 +70,27 @@ class _CreatTaskView extends State<EditTempView> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final queueLength = tempQueue.isNotEmpty ? tempQueue.length : 1;
 
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(onPressed: widget.onBackClicked, icon: Icon(Icons.arrow_back_rounded)),
         title: const Text("Preview Tasks"),
         actions: [
-          // PopupMenuButton(
-          //   icon: Icon(Icons.more_vert_rounded),
-          //   itemBuilder: (context) => [
-          //   const PopupMenuItem(
-          //     value: 'clear',
-          //     child: Row(
-          //       children: [
-          //         Icon(Icons.delete_forever, size: 20),
-          //         SizedBox(width: 8),
-          //         Text("Clear"),
-          //       ],
-          //     ),
-          //   ),
-          //   const PopupMenuItem(
-          //     value: 'share',
-          //     child: Row(
-          //       children: [
-          //         Icon(Icons.share, size: 20),
-          //         SizedBox(width: 8),
-          //         Text("Share"),
-          //       ],
-          //     ),
-          //   ),
-          // ])
+          PopupMenuButton(
+            icon: Icon(Icons.more_vert_rounded),
+            onSelected: (_) => getQueue(),
+            itemBuilder: (context) => [
+            const PopupMenuItem(
+              value: 'refresh',
+              child: Row(
+                children: [
+                  Icon(Icons.refresh, size: 20),
+                  SizedBox(width: 8),
+                  Text("Refresh"),
+                ],
+              ),
+            ),
+          ])
         ],
       ),
       body: Padding(
@@ -167,13 +161,19 @@ class _CreatTaskView extends State<EditTempView> {
                       title: tempQueue[index].title, 
                       labels: [tempQueue[index].partTitle],
                       coverUrl: tempQueue[index].coverUrl, 
-                      onAddToList: (){}
                     )
                   ),
                 ),
               )
             else
-              Center(child: const Text("list is empty"))
+              // Empty tips
+              Expanded(
+                child: Center(
+                  child: Text("List is empty", style: theme.textTheme.titleLarge,),
+
+                ),
+              )
+              
           ],
         ),
       ),
