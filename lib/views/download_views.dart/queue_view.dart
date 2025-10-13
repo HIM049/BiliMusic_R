@@ -1,5 +1,6 @@
 
-import 'package:bili_music_r/components/slidable_item.dart';
+import 'package:bili_music_r/components/mini_card.dart';
+import 'package:bili_music_r/src/rust/api/task_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -13,12 +14,28 @@ class QueueView extends StatefulWidget {
 }
 
 class _QueueView extends State<QueueView> {
+  List<TempItem> taskQueue = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    getQueue();
+  }
+
+  Future<void> getQueue() async {
+    print("get");
+    final queue = await getTaskQueue();
+    print(queue);
+    setState(() {
+      taskQueue = queue;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // leading: IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back_rounded)),
         title: const Text("Download"),
         actions: [
             
@@ -28,6 +45,7 @@ class _QueueView extends State<QueueView> {
 
           PopupMenuButton(
             icon: Icon(Icons.more_vert_rounded),
+            onSelected: (value) => getQueue,
             itemBuilder: (context) => [
             const PopupMenuItem(
               value: 'clear',
@@ -53,39 +71,39 @@ class _QueueView extends State<QueueView> {
         ],
       ),
       body: Center(
-        child: SlidableAutoCloseBehavior(
-          child: ListView(
-            children: [
-              SlidableItem(
-                listItemBuilder: (context) => Card(
-                  child: ListTile(
-                    title: Text("MusicTitle"),
-                    subtitle: Text("by KAFU"),
-                    isThreeLine: true,
-                    trailing: IconButton(
-                      icon: Icon(Icons.more_horiz_rounded), 
-                      onPressed: (){ Slidable.of(context)?.openStartActionPane(); },
-                    ),
+        child: Column(
+          children: [
+            if (taskQueue.isNotEmpty)
+              Expanded(
+                child: SlidableAutoCloseBehavior(
+                  child: ListView(
+                    children: List.generate(taskQueue.length, (index) => MiniCard(
+                      title: taskQueue[index].title, 
+                      coverUrl: taskQueue[index].coverUrl,
+                      labels: [taskQueue[index].partTitle],
+                    ))
+                    // [
+                    //   SlidableItem(
+                    //     listItemBuilder: (context) => Card(
+                    //       child: ListTile(
+                    //         title: Text("MusicTitle"),
+                    //         subtitle: Text("by KAFU"),
+                    //         isThreeLine: true,
+                    //         trailing: IconButton(
+                    //           icon: Icon(Icons.more_horiz_rounded), 
+                    //           onPressed: (){ Slidable.of(context)?.openStartActionPane(); },
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     deleteClicked: (context){},
+                    //   )
+                    // ]
                   ),
                 ),
-                deleteClicked: (context){},
-              ),
-              SlidableItem(
-                listItemBuilder: (context) => Card(
-                  child: ListTile(
-                    title: Text("MusicTitle"),
-                    subtitle: Text("by KAFU"),
-                    isThreeLine: true,
-                    trailing: IconButton(
-                      icon: Icon(Icons.more_horiz_rounded), 
-                      onPressed: (){ Slidable.of(context)?.openStartActionPane(); },
-                    ),
-                  ),
-                ),
-                deleteClicked: (context){},
               )
-            ]
-          ),
+            else
+              Text("nothing")
+          ],
         )
       ),
       floatingActionButton: widget.isDesktopMode ? FloatingActionButton.extended(

@@ -12,7 +12,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated_web.dart';
-import 'task_modules.dart';
+import 'queue_handler.dart';
 
 abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   RustLibApiImplPlatform({
@@ -21,21 +21,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
     required super.generalizedFrbRustBinding,
     required super.portManager,
   });
-
-  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_TaskPtr => wire
-      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask;
-
-  @protected
-  Task
-  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask(
-    dynamic raw,
-  );
-
-  @protected
-  Task
-  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask(
-    dynamic raw,
-  );
 
   @protected
   String dco_decode_String(dynamic raw);
@@ -56,12 +41,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   PlatformInt64 dco_decode_i_64(dynamic raw);
 
   @protected
-  List<Task>
-  dco_decode_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask(
-    dynamic raw,
-  );
-
-  @protected
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw);
 
   @protected
@@ -77,22 +56,7 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void dco_decode_unit(dynamic raw);
 
   @protected
-  BigInt dco_decode_usize(dynamic raw);
-
-  @protected
   VideoInfoFlutter dco_decode_video_info_flutter(dynamic raw);
-
-  @protected
-  Task
-  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask(
-    SseDeserializer deserializer,
-  );
-
-  @protected
-  Task
-  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask(
-    SseDeserializer deserializer,
-  );
 
   @protected
   String sse_decode_String(SseDeserializer deserializer);
@@ -115,12 +79,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   PlatformInt64 sse_decode_i_64(SseDeserializer deserializer);
 
   @protected
-  List<Task>
-  sse_decode_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask(
-    SseDeserializer deserializer,
-  );
-
-  @protected
   Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer);
 
   @protected
@@ -136,24 +94,7 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_decode_unit(SseDeserializer deserializer);
 
   @protected
-  BigInt sse_decode_usize(SseDeserializer deserializer);
-
-  @protected
   VideoInfoFlutter sse_decode_video_info_flutter(SseDeserializer deserializer);
-
-  @protected
-  void
-  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask(
-    Task self,
-    SseSerializer serializer,
-  );
-
-  @protected
-  void
-  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask(
-    Task self,
-    SseSerializer serializer,
-  );
 
   @protected
   void sse_encode_String(String self, SseSerializer serializer);
@@ -177,13 +118,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_i_64(PlatformInt64 self, SseSerializer serializer);
 
   @protected
-  void
-  sse_encode_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask(
-    List<Task> self,
-    SseSerializer serializer,
-  );
-
-  @protected
   void sse_encode_list_prim_u_8_strict(
     Uint8List self,
     SseSerializer serializer,
@@ -202,9 +136,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_unit(void self, SseSerializer serializer);
 
   @protected
-  void sse_encode_usize(BigInt self, SseSerializer serializer);
-
-  @protected
   void sse_encode_video_info_flutter(
     VideoInfoFlutter self,
     SseSerializer serializer,
@@ -215,22 +146,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
 class RustLibWire implements BaseWire {
   RustLibWire.fromExternalLibrary(ExternalLibrary lib);
-
-  void
-  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask(
-    int ptr,
-  ) => wasmModule
-      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask(
-        ptr,
-      );
-
-  void
-  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask(
-    int ptr,
-  ) => wasmModule
-      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask(
-        ptr,
-      );
 }
 
 @JS('wasm_bindgen')
@@ -238,14 +153,4 @@ external RustLibWasmModule get wasmModule;
 
 @JS()
 @anonymous
-extension type RustLibWasmModule._(JSObject _) implements JSObject {
-  external void
-  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask(
-    int ptr,
-  );
-
-  external void
-  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask(
-    int ptr,
-  );
-}
+extension type RustLibWasmModule._(JSObject _) implements JSObject {}

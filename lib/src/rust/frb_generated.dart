@@ -11,7 +11,7 @@ import 'frb_generated.dart';
 import 'frb_generated.io.dart'
     if (dart.library.js_interop) 'frb_generated.web.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
-import 'task_modules.dart';
+import 'queue_handler.dart';
 
 /// Main entrypoint of the Rust API
 class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
@@ -68,7 +68,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => 815249113;
+  int get rustContentHash => 1757443917;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -85,15 +85,9 @@ abstract class RustLibApi extends BaseApi {
 
   Future<void> crateApiTaskHandlerCreateTempQueueFromCurrent();
 
-  Future<List<Task>> crateApiTaskHandlerFilterByParts({
-    required List<Task> queue,
-  });
+  Future<void> crateApiTaskHandlerDeleteTaskQueue();
 
-  Future<List<Task>> crateApiTaskHandlerFilterByRange({
-    required List<Task> queue,
-    required BigInt from,
-    required BigInt to,
-  });
+  Future<List<TempItem>> crateApiTaskHandlerGetTaskQueue();
 
   Future<List<TempItem>> crateApiTaskHandlerGetTempQueue({
     required FilterOptions options,
@@ -104,17 +98,6 @@ abstract class RustLibApi extends BaseApi {
   Future<void> crateApiQueryInitApp();
 
   Future<VideoInfoFlutter> crateApiQueryQueryBiliInfo({required String input});
-
-  Future<List<Task>> crateApiTaskHandlerTaskQueueFilter({
-    required List<Task> queue,
-    required FilterOptions options,
-  });
-
-  RustArcIncrementStrongCountFnType get rust_arc_increment_strong_count_Task;
-
-  RustArcDecrementStrongCountFnType get rust_arc_decrement_strong_count_Task;
-
-  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_TaskPtr;
 }
 
 class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
@@ -189,17 +172,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<List<Task>> crateApiTaskHandlerFilterByParts({
-    required List<Task> queue,
-  }) {
+  Future<void> crateApiTaskHandlerDeleteTaskQueue() {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
           final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask(
-            queue,
-            serializer,
-          );
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
@@ -208,36 +185,25 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           );
         },
         codec: SseCodec(
-          decodeSuccessData:
-              sse_decode_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask,
+          decodeSuccessData: sse_decode_unit,
           decodeErrorData: null,
         ),
-        constMeta: kCrateApiTaskHandlerFilterByPartsConstMeta,
-        argValues: [queue],
+        constMeta: kCrateApiTaskHandlerDeleteTaskQueueConstMeta,
+        argValues: [],
         apiImpl: this,
       ),
     );
   }
 
-  TaskConstMeta get kCrateApiTaskHandlerFilterByPartsConstMeta =>
-      const TaskConstMeta(debugName: "filter_by_parts", argNames: ["queue"]);
+  TaskConstMeta get kCrateApiTaskHandlerDeleteTaskQueueConstMeta =>
+      const TaskConstMeta(debugName: "delete_task_queue", argNames: []);
 
   @override
-  Future<List<Task>> crateApiTaskHandlerFilterByRange({
-    required List<Task> queue,
-    required BigInt from,
-    required BigInt to,
-  }) {
+  Future<List<TempItem>> crateApiTaskHandlerGetTaskQueue() {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
           final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask(
-            queue,
-            serializer,
-          );
-          sse_encode_usize(from, serializer);
-          sse_encode_usize(to, serializer);
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
@@ -246,22 +212,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           );
         },
         codec: SseCodec(
-          decodeSuccessData:
-              sse_decode_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask,
+          decodeSuccessData: sse_decode_list_temp_item,
           decodeErrorData: null,
         ),
-        constMeta: kCrateApiTaskHandlerFilterByRangeConstMeta,
-        argValues: [queue, from, to],
+        constMeta: kCrateApiTaskHandlerGetTaskQueueConstMeta,
+        argValues: [],
         apiImpl: this,
       ),
     );
   }
 
-  TaskConstMeta get kCrateApiTaskHandlerFilterByRangeConstMeta =>
-      const TaskConstMeta(
-        debugName: "filter_by_range",
-        argNames: ["queue", "from", "to"],
-      );
+  TaskConstMeta get kCrateApiTaskHandlerGetTaskQueueConstMeta =>
+      const TaskConstMeta(debugName: "get_task_queue", argNames: []);
 
   @override
   Future<List<TempItem>> crateApiTaskHandlerGetTempQueue({
@@ -375,71 +337,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta get kCrateApiQueryQueryBiliInfoConstMeta =>
       const TaskConstMeta(debugName: "query_bili_info", argNames: ["input"]);
 
-  @override
-  Future<List<Task>> crateApiTaskHandlerTaskQueueFilter({
-    required List<Task> queue,
-    required FilterOptions options,
-  }) {
-    return handler.executeNormal(
-      NormalTask(
-        callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask(
-            queue,
-            serializer,
-          );
-          sse_encode_box_autoadd_filter_options(options, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 9,
-            port: port_,
-          );
-        },
-        codec: SseCodec(
-          decodeSuccessData:
-              sse_decode_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask,
-          decodeErrorData: null,
-        ),
-        constMeta: kCrateApiTaskHandlerTaskQueueFilterConstMeta,
-        argValues: [queue, options],
-        apiImpl: this,
-      ),
-    );
-  }
-
-  TaskConstMeta get kCrateApiTaskHandlerTaskQueueFilterConstMeta =>
-      const TaskConstMeta(
-        debugName: "task_queue_filter",
-        argNames: ["queue", "options"],
-      );
-
-  RustArcIncrementStrongCountFnType
-  get rust_arc_increment_strong_count_Task => wire
-      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask;
-
-  RustArcDecrementStrongCountFnType
-  get rust_arc_decrement_strong_count_Task => wire
-      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask;
-
-  @protected
-  Task
-  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask(
-    dynamic raw,
-  ) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return TaskImpl.frbInternalDcoDecode(raw as List<dynamic>);
-  }
-
-  @protected
-  Task
-  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask(
-    dynamic raw,
-  ) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return TaskImpl.frbInternalDcoDecode(raw as List<dynamic>);
-  }
-
   @protected
   String dco_decode_String(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
@@ -484,19 +381,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  List<Task>
-  dco_decode_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask(
-    dynamic raw,
-  ) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return (raw as List<dynamic>)
-        .map(
-          dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask,
-        )
-        .toList();
-  }
-
-  @protected
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as Uint8List;
@@ -534,12 +418,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  BigInt dco_decode_usize(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return dcoDecodeU64(raw);
-  }
-
-  @protected
   VideoInfoFlutter dco_decode_video_info_flutter(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
@@ -557,30 +435,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       tnameV2: dco_decode_String(arr[8]),
       pubdate: dco_decode_i_64(arr[9]),
       desc: dco_decode_String(arr[10]),
-    );
-  }
-
-  @protected
-  Task
-  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask(
-    SseDeserializer deserializer,
-  ) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return TaskImpl.frbInternalSseDecode(
-      sse_decode_usize(deserializer),
-      sse_decode_i_32(deserializer),
-    );
-  }
-
-  @protected
-  Task
-  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask(
-    SseDeserializer deserializer,
-  ) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return TaskImpl.frbInternalSseDecode(
-      sse_decode_usize(deserializer),
-      sse_decode_i_32(deserializer),
     );
   }
 
@@ -631,25 +485,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  List<Task>
-  sse_decode_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask(
-    SseDeserializer deserializer,
-  ) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-
-    var len_ = sse_decode_i_32(deserializer);
-    var ans_ = <Task>[];
-    for (var idx_ = 0; idx_ < len_; ++idx_) {
-      ans_.add(
-        sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask(
-          deserializer,
-        ),
-      );
-    }
-    return ans_;
-  }
-
-  @protected
   Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var len_ = sse_decode_i_32(deserializer);
@@ -693,12 +528,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  BigInt sse_decode_usize(SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return deserializer.buffer.getBigUint64();
-  }
-
-  @protected
   VideoInfoFlutter sse_decode_video_info_flutter(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_aid = sse_decode_i_64(deserializer);
@@ -724,32 +553,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       tnameV2: var_tnameV2,
       pubdate: var_pubdate,
       desc: var_desc,
-    );
-  }
-
-  @protected
-  void
-  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask(
-    Task self,
-    SseSerializer serializer,
-  ) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_usize(
-      (self as TaskImpl).frbInternalSseEncode(move: true),
-      serializer,
-    );
-  }
-
-  @protected
-  void
-  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask(
-    Task self,
-    SseSerializer serializer,
-  ) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_usize(
-      (self as TaskImpl).frbInternalSseEncode(move: null),
-      serializer,
     );
   }
 
@@ -795,22 +598,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void
-  sse_encode_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask(
-    List<Task> self,
-    SseSerializer serializer,
-  ) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_i_32(self.length, serializer);
-    for (final item in self) {
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTask(
-        item,
-        serializer,
-      );
-    }
-  }
-
-  @protected
   void sse_encode_list_prim_u_8_strict(
     Uint8List self,
     SseSerializer serializer,
@@ -852,12 +639,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_usize(BigInt self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    serializer.buffer.putBigUint64(self);
-  }
-
-  @protected
   void sse_encode_video_info_flutter(
     VideoInfoFlutter self,
     SseSerializer serializer,
@@ -875,24 +656,4 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_i_64(self.pubdate, serializer);
     sse_encode_String(self.desc, serializer);
   }
-}
-
-@sealed
-class TaskImpl extends RustOpaque implements Task {
-  // Not to be used by end users
-  TaskImpl.frbInternalDcoDecode(List<dynamic> wire)
-    : super.frbInternalDcoDecode(wire, _kStaticData);
-
-  // Not to be used by end users
-  TaskImpl.frbInternalSseDecode(BigInt ptr, int externalSizeOnNative)
-    : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
-
-  static final _kStaticData = RustArcStaticData(
-    rustArcIncrementStrongCount:
-        RustLib.instance.api.rust_arc_increment_strong_count_Task,
-    rustArcDecrementStrongCount:
-        RustLib.instance.api.rust_arc_decrement_strong_count_Task,
-    rustArcDecrementStrongCountPtr:
-        RustLib.instance.api.rust_arc_decrement_strong_count_TaskPtr,
-  );
 }

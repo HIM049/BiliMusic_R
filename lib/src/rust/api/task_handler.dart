@@ -4,11 +4,10 @@
 // ignore_for_file: invalid_use_of_internal_member, unused_import, unnecessary_import
 
 import '../frb_generated.dart';
-import '../task_modules.dart';
+import '../queue_handler.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
 // These functions are ignored because they are not marked as `pub`: `from_task`
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `fmt`
 
 Future<void> createTempQueueFromCurrent() =>
     RustLib.instance.api.crateApiTaskHandlerCreateTempQueueFromCurrent();
@@ -24,50 +23,11 @@ Future<void> creatTasksFromTemp({required FilterOptions options}) => RustLib
     .api
     .crateApiTaskHandlerCreatTasksFromTemp(options: options);
 
-Future<List<Task>> taskQueueFilter({
-  required List<Task> queue,
-  required FilterOptions options,
-}) => RustLib.instance.api.crateApiTaskHandlerTaskQueueFilter(
-  queue: queue,
-  options: options,
-);
+Future<List<TempItem>> getTaskQueue() =>
+    RustLib.instance.api.crateApiTaskHandlerGetTaskQueue();
 
-Future<List<Task>> filterByParts({required List<Task> queue}) =>
-    RustLib.instance.api.crateApiTaskHandlerFilterByParts(queue: queue);
-
-Future<List<Task>> filterByRange({
-  required List<Task> queue,
-  required BigInt from,
-  required BigInt to,
-}) => RustLib.instance.api.crateApiTaskHandlerFilterByRange(
-  queue: queue,
-  from: from,
-  to: to,
-);
-
-class FilterOptions {
-  final bool isWithParts;
-  final int from;
-  final int to;
-
-  const FilterOptions({
-    required this.isWithParts,
-    required this.from,
-    required this.to,
-  });
-
-  @override
-  int get hashCode => isWithParts.hashCode ^ from.hashCode ^ to.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is FilterOptions &&
-          runtimeType == other.runtimeType &&
-          isWithParts == other.isWithParts &&
-          from == other.from &&
-          to == other.to;
-}
+Future<void> deleteTaskQueue() =>
+    RustLib.instance.api.crateApiTaskHandlerDeleteTaskQueue();
 
 class TempItem {
   final String title;

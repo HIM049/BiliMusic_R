@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:bili_music_r/components/mini_card.dart';
 import 'package:bili_music_r/src/rust/api/query.dart';
 import 'package:bili_music_r/src/rust/api/task_handler.dart';
+import 'package:bili_music_r/src/rust/queue_handler.dart';
 import 'package:flutter/material.dart';
 
 class EditTempView extends StatefulWidget {
@@ -22,8 +25,8 @@ class _CreatTaskView extends State<EditTempView> {
   VideoInfoFlutter? result;
   bool isWithParts = true;
   List<TempItem> tempQueue = [];
-  RangeValues range = RangeValues(1, 1);
-  int tempLength = 2;
+  RangeValues range = RangeValues(0, 1);
+  int tempLength = 0;
 
   // add temp queue to download queue with filter
   Future<void> addToDownload() async {
@@ -50,8 +53,8 @@ class _CreatTaskView extends State<EditTempView> {
   Future<void> initValueRange() async {
     final length = await getTempQueueLength();
     setState(() {
-      tempLength = length;
-      range = RangeValues(1, tempLength.toDouble());
+      tempLength = length-1;
+      range = RangeValues(0, (tempLength).toDouble());
     });
   }
 
@@ -59,8 +62,8 @@ class _CreatTaskView extends State<EditTempView> {
   Future<void> getQueue() async {
     final newQueue = await getTempQueue(options: FilterOptions(
         isWithParts: isWithParts, 
-        from: range.start.toInt()-1,
-        to: range.end.toInt()-1,
+        from: range.start.toInt(),
+        to: range.end.toInt(),
       ));
     setState(() {
       tempQueue = newQueue;
@@ -138,9 +141,9 @@ class _CreatTaskView extends State<EditTempView> {
                         Expanded(
                           child: RangeSlider(
                             values: range,
-                            divisions: tempLength-1,
-                            min: 1,
-                            max: tempLength.toDouble(),
+                            divisions: max(tempLength, 1),
+                            min: 0,
+                            max: max(tempLength, 1).toDouble(),
                             onChanged: (RangeValues values) {
                               setState(() { range = values; });
                               getQueue();
