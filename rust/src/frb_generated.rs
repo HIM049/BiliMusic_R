@@ -25,6 +25,8 @@
 
 // Section: imports
 
+use crate::*;
+use bilibili::modules::{Collection, Video};
 use flutter_rust_bridge::for_generated::byteorder::{NativeEndian, ReadBytesExt, WriteBytesExt};
 use flutter_rust_bridge::for_generated::{transform_result_dco, Lifetimeable, Lockable};
 use flutter_rust_bridge::{Handler, IntoIntoDart};
@@ -37,7 +39,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.11.1";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 1757443917;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 932944700;
 
 // Section: executor
 
@@ -45,6 +47,75 @@ flutter_rust_bridge::frb_generated_default_handler!();
 
 // Section: wire_funcs
 
+fn wire__crate__api__modules__basic_info_from_collection_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "basic_info_from_collection",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_collect = <Collection>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| {
+                transform_result_sse::<_, ()>((move || {
+                    let output_ok = Result::<_, ()>::Ok(
+                        crate::api::modules::BasicInfo::from_collection(api_collect),
+                    )?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+fn wire__crate__api__modules__basic_info_from_video_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "basic_info_from_video",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_video = <Video>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| {
+                transform_result_sse::<_, ()>((move || {
+                    let output_ok =
+                        Result::<_, ()>::Ok(crate::api::modules::BasicInfo::from_video(api_video))?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
 fn wire__crate__api__task_handler__creat_tasks_from_temp_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
@@ -354,29 +425,86 @@ const _: fn() = || {
         let _: String = TempItem.part_title;
         let _: String = TempItem.cover_url;
     }
-    {
-        let VideoInfoFlutter = None::<crate::api::query::VideoInfoFlutter>.unwrap();
-        let _: i64 = VideoInfoFlutter.aid;
-        let _: String = VideoInfoFlutter.bvid;
-        let _: i64 = VideoInfoFlutter.cid;
-        let _: String = VideoInfoFlutter.title;
-        let _: String = VideoInfoFlutter.cover;
-        let _: String = VideoInfoFlutter.author;
-        let _: i64 = VideoInfoFlutter.count;
-        let _: String = VideoInfoFlutter.tname;
-        let _: String = VideoInfoFlutter.tname_v2;
-        let _: i64 = VideoInfoFlutter.pubdate;
-        let _: String = VideoInfoFlutter.desc;
-    }
 };
 
+// Section: related_funcs
+
+flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
+    flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Collection>
+);
+flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
+    flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Video>
+);
+
 // Section: dart2rust
+
+impl SseDecode for Collection {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <RustOpaqueMoi<
+            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Collection>,
+        >>::sse_decode(deserializer);
+        return flutter_rust_bridge::for_generated::rust_auto_opaque_decode_owned(inner);
+    }
+}
+
+impl SseDecode for Video {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <RustOpaqueMoi<
+            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Video>,
+        >>::sse_decode(deserializer);
+        return flutter_rust_bridge::for_generated::rust_auto_opaque_decode_owned(inner);
+    }
+}
+
+impl SseDecode
+    for RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Collection>>
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <usize>::sse_decode(deserializer);
+        return decode_rust_opaque_moi(inner);
+    }
+}
+
+impl SseDecode for RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Video>> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <usize>::sse_decode(deserializer);
+        return decode_rust_opaque_moi(inner);
+    }
+}
 
 impl SseDecode for String {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut inner = <Vec<u8>>::sse_decode(deserializer);
         return String::from_utf8(inner).unwrap();
+    }
+}
+
+impl SseDecode for crate::api::modules::BasicInfo {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_id = <String>::sse_decode(deserializer);
+        let mut var_title = <String>::sse_decode(deserializer);
+        let mut var_coverUrl = <String>::sse_decode(deserializer);
+        let mut var_author = <String>::sse_decode(deserializer);
+        let mut var_count = <i64>::sse_decode(deserializer);
+        let mut var_tname = <String>::sse_decode(deserializer);
+        let mut var_pubdate = <String>::sse_decode(deserializer);
+        let mut var_desc = <String>::sse_decode(deserializer);
+        return crate::api::modules::BasicInfo {
+            id: var_id,
+            title: var_title,
+            cover_url: var_coverUrl,
+            author: var_author,
+            count: var_count,
+            tname: var_tname,
+            pubdate: var_pubdate,
+            desc: var_desc,
+        };
     }
 }
 
@@ -467,33 +595,10 @@ impl SseDecode for () {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {}
 }
 
-impl SseDecode for crate::api::query::VideoInfoFlutter {
+impl SseDecode for usize {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_aid = <i64>::sse_decode(deserializer);
-        let mut var_bvid = <String>::sse_decode(deserializer);
-        let mut var_cid = <i64>::sse_decode(deserializer);
-        let mut var_title = <String>::sse_decode(deserializer);
-        let mut var_cover = <String>::sse_decode(deserializer);
-        let mut var_author = <String>::sse_decode(deserializer);
-        let mut var_count = <i64>::sse_decode(deserializer);
-        let mut var_tname = <String>::sse_decode(deserializer);
-        let mut var_tnameV2 = <String>::sse_decode(deserializer);
-        let mut var_pubdate = <i64>::sse_decode(deserializer);
-        let mut var_desc = <String>::sse_decode(deserializer);
-        return crate::api::query::VideoInfoFlutter {
-            aid: var_aid,
-            bvid: var_bvid,
-            cid: var_cid,
-            title: var_title,
-            cover: var_cover,
-            author: var_author,
-            count: var_count,
-            tname: var_tname,
-            tname_v2: var_tnameV2,
-            pubdate: var_pubdate,
-            desc: var_desc,
-        };
+        deserializer.cursor.read_u64::<NativeEndian>().unwrap() as _
     }
 }
 
@@ -506,34 +611,43 @@ fn pde_ffi_dispatcher_primary_impl(
 ) {
     // Codec=Pde (Serialization + dispatch), see doc to use other codecs
     match func_id {
-        1 => wire__crate__api__task_handler__creat_tasks_from_temp_impl(
+        1 => wire__crate__api__modules__basic_info_from_collection_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        2 => wire__crate__api__task_handler__create_temp_queue_from_current_impl(
+        2 => {
+            wire__crate__api__modules__basic_info_from_video_impl(port, ptr, rust_vec_len, data_len)
+        }
+        3 => wire__crate__api__task_handler__creat_tasks_from_temp_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        3 => wire__crate__api__task_handler__delete_task_queue_impl(
+        4 => wire__crate__api__task_handler__create_temp_queue_from_current_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        4 => wire__crate__api__task_handler__get_task_queue_impl(port, ptr, rust_vec_len, data_len),
-        5 => wire__crate__api__task_handler__get_temp_queue_impl(port, ptr, rust_vec_len, data_len),
-        6 => wire__crate__api__task_handler__get_temp_queue_length_impl(
+        5 => wire__crate__api__task_handler__delete_task_queue_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        7 => wire__crate__api__query__init_app_impl(port, ptr, rust_vec_len, data_len),
-        8 => wire__crate__api__query__query_bili_info_impl(port, ptr, rust_vec_len, data_len),
+        6 => wire__crate__api__task_handler__get_task_queue_impl(port, ptr, rust_vec_len, data_len),
+        7 => wire__crate__api__task_handler__get_temp_queue_impl(port, ptr, rust_vec_len, data_len),
+        8 => wire__crate__api__task_handler__get_temp_queue_length_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        9 => wire__crate__api__query__init_app_impl(port, ptr, rust_vec_len, data_len),
+        10 => wire__crate__api__query__query_bili_info_impl(port, ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }
@@ -552,6 +666,63 @@ fn pde_ffi_dispatcher_sync_impl(
 
 // Section: rust2dart
 
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for FrbWrapper<Collection> {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self.0)
+            .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for FrbWrapper<Collection> {}
+
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<Collection>> for Collection {
+    fn into_into_dart(self) -> FrbWrapper<Collection> {
+        self.into()
+    }
+}
+
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for FrbWrapper<Video> {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self.0)
+            .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for FrbWrapper<Video> {}
+
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<Video>> for Video {
+    fn into_into_dart(self) -> FrbWrapper<Video> {
+        self.into()
+    }
+}
+
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::modules::BasicInfo {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.id.into_into_dart().into_dart(),
+            self.title.into_into_dart().into_dart(),
+            self.cover_url.into_into_dart().into_dart(),
+            self.author.into_into_dart().into_dart(),
+            self.count.into_into_dart().into_dart(),
+            self.tname.into_into_dart().into_dart(),
+            self.pubdate.into_into_dart().into_dart(),
+            self.desc.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::modules::BasicInfo
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::modules::BasicInfo>
+    for crate::api::modules::BasicInfo
+{
+    fn into_into_dart(self) -> crate::api::modules::BasicInfo {
+        self
+    }
+}
 // Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::queue_handler::FilterOptions> {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
@@ -596,34 +767,41 @@ impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::task_handler::Temp
         self.into()
     }
 }
-// Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::query::VideoInfoFlutter> {
-    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-        [
-            self.0.aid.into_into_dart().into_dart(),
-            self.0.bvid.into_into_dart().into_dart(),
-            self.0.cid.into_into_dart().into_dart(),
-            self.0.title.into_into_dart().into_dart(),
-            self.0.cover.into_into_dart().into_dart(),
-            self.0.author.into_into_dart().into_dart(),
-            self.0.count.into_into_dart().into_dart(),
-            self.0.tname.into_into_dart().into_dart(),
-            self.0.tname_v2.into_into_dart().into_dart(),
-            self.0.pubdate.into_into_dart().into_dart(),
-            self.0.desc.into_into_dart().into_dart(),
-        ]
-        .into_dart()
+
+impl SseEncode for Collection {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Collection>>>::sse_encode(flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self), serializer);
     }
 }
-impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for FrbWrapper<crate::api::query::VideoInfoFlutter>
-{
+
+impl SseEncode for Video {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Video>>>::sse_encode(
+            flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self),
+            serializer,
+        );
+    }
 }
-impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::query::VideoInfoFlutter>>
-    for crate::api::query::VideoInfoFlutter
+
+impl SseEncode
+    for RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Collection>>
 {
-    fn into_into_dart(self) -> FrbWrapper<crate::api::query::VideoInfoFlutter> {
-        self.into()
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        let (ptr, size) = self.sse_encode_raw();
+        <usize>::sse_encode(ptr, serializer);
+        <i32>::sse_encode(size, serializer);
+    }
+}
+
+impl SseEncode for RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Video>> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        let (ptr, size) = self.sse_encode_raw();
+        <usize>::sse_encode(ptr, serializer);
+        <i32>::sse_encode(size, serializer);
     }
 }
 
@@ -631,6 +809,20 @@ impl SseEncode for String {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <Vec<u8>>::sse_encode(self.into_bytes(), serializer);
+    }
+}
+
+impl SseEncode for crate::api::modules::BasicInfo {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.id, serializer);
+        <String>::sse_encode(self.title, serializer);
+        <String>::sse_encode(self.cover_url, serializer);
+        <String>::sse_encode(self.author, serializer);
+        <i64>::sse_encode(self.count, serializer);
+        <String>::sse_encode(self.tname, serializer);
+        <String>::sse_encode(self.pubdate, serializer);
+        <String>::sse_encode(self.desc, serializer);
     }
 }
 
@@ -705,20 +897,13 @@ impl SseEncode for () {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {}
 }
 
-impl SseEncode for crate::api::query::VideoInfoFlutter {
+impl SseEncode for usize {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <i64>::sse_encode(self.aid, serializer);
-        <String>::sse_encode(self.bvid, serializer);
-        <i64>::sse_encode(self.cid, serializer);
-        <String>::sse_encode(self.title, serializer);
-        <String>::sse_encode(self.cover, serializer);
-        <String>::sse_encode(self.author, serializer);
-        <i64>::sse_encode(self.count, serializer);
-        <String>::sse_encode(self.tname, serializer);
-        <String>::sse_encode(self.tname_v2, serializer);
-        <i64>::sse_encode(self.pubdate, serializer);
-        <String>::sse_encode(self.desc, serializer);
+        serializer
+            .cursor
+            .write_u64::<NativeEndian>(self as _)
+            .unwrap();
     }
 }
 
@@ -730,6 +915,7 @@ mod io {
     // Section: imports
 
     use super::*;
+    use crate::*;
     use flutter_rust_bridge::for_generated::byteorder::{
         NativeEndian, ReadBytesExt, WriteBytesExt,
     };
@@ -739,6 +925,34 @@ mod io {
     // Section: boilerplate
 
     flutter_rust_bridge::frb_generated_boilerplate_io!();
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_bili_music_r_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCollection(
+        ptr: *const std::ffi::c_void,
+    ) {
+        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Collection>>::increment_strong_count(ptr as _);
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_bili_music_r_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCollection(
+        ptr: *const std::ffi::c_void,
+    ) {
+        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Collection>>::decrement_strong_count(ptr as _);
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_bili_music_r_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVideo(
+        ptr: *const std::ffi::c_void,
+    ) {
+        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Video>>::increment_strong_count(ptr as _);
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_bili_music_r_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVideo(
+        ptr: *const std::ffi::c_void,
+    ) {
+        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Video>>::decrement_strong_count(ptr as _);
+    }
 }
 #[cfg(not(target_family = "wasm"))]
 pub use io::*;
@@ -752,6 +966,7 @@ mod web {
     // Section: imports
 
     use super::*;
+    use crate::*;
     use flutter_rust_bridge::for_generated::byteorder::{
         NativeEndian, ReadBytesExt, WriteBytesExt,
     };
@@ -763,6 +978,34 @@ mod web {
     // Section: boilerplate
 
     flutter_rust_bridge::frb_generated_boilerplate_web!();
+
+    #[wasm_bindgen]
+    pub fn rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCollection(
+        ptr: *const std::ffi::c_void,
+    ) {
+        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Collection>>::increment_strong_count(ptr as _);
+    }
+
+    #[wasm_bindgen]
+    pub fn rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCollection(
+        ptr: *const std::ffi::c_void,
+    ) {
+        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Collection>>::decrement_strong_count(ptr as _);
+    }
+
+    #[wasm_bindgen]
+    pub fn rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVideo(
+        ptr: *const std::ffi::c_void,
+    ) {
+        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Video>>::increment_strong_count(ptr as _);
+    }
+
+    #[wasm_bindgen]
+    pub fn rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVideo(
+        ptr: *const std::ffi::c_void,
+    ) {
+        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Video>>::decrement_strong_count(ptr as _);
+    }
 }
 #[cfg(target_family = "wasm")]
 pub use web::*;

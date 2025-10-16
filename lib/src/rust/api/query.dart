@@ -4,68 +4,11 @@
 // ignore_for_file: invalid_use_of_internal_member, unused_import, unnecessary_import
 
 import '../frb_generated.dart';
+import 'modules.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
 // These functions are ignored because they are not marked as `pub`: `from_video`
+// These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `VideoInfoFlutter`
 
-Future<VideoInfoFlutter> queryBiliInfo({required String input}) =>
+Future<BasicInfo> queryBiliInfo({required String input}) =>
     RustLib.instance.api.crateApiQueryQueryBiliInfo(input: input);
-
-class VideoInfoFlutter {
-  final PlatformInt64 aid;
-  final String bvid;
-  final PlatformInt64 cid;
-  final String title;
-  final String cover;
-  final String author;
-  final PlatformInt64 count;
-  final String tname;
-  final String tnameV2;
-  final PlatformInt64 pubdate;
-  final String desc;
-
-  const VideoInfoFlutter({
-    required this.aid,
-    required this.bvid,
-    required this.cid,
-    required this.title,
-    required this.cover,
-    required this.author,
-    required this.count,
-    required this.tname,
-    required this.tnameV2,
-    required this.pubdate,
-    required this.desc,
-  });
-
-  @override
-  int get hashCode =>
-      aid.hashCode ^
-      bvid.hashCode ^
-      cid.hashCode ^
-      title.hashCode ^
-      cover.hashCode ^
-      author.hashCode ^
-      count.hashCode ^
-      tname.hashCode ^
-      tnameV2.hashCode ^
-      pubdate.hashCode ^
-      desc.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is VideoInfoFlutter &&
-          runtimeType == other.runtimeType &&
-          aid == other.aid &&
-          bvid == other.bvid &&
-          cid == other.cid &&
-          title == other.title &&
-          cover == other.cover &&
-          author == other.author &&
-          count == other.count &&
-          tname == other.tname &&
-          tnameV2 == other.tnameV2 &&
-          pubdate == other.pubdate &&
-          desc == other.desc;
-}
