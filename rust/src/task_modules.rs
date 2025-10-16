@@ -1,4 +1,4 @@
-use bilibili::modules::{Video, VideoPart};
+use bilibili::modules::{Collection, Video, VideoPart};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -31,6 +31,12 @@ impl Task {
             );
         }
         task_list
+    }
+
+    pub async fn from_collection(collect: Collection) -> Vec<Self> {
+        let mut task_list: Vec<Self> = vec![];
+
+        todo!()
     }
 }
 

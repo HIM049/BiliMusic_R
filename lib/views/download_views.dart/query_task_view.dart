@@ -1,3 +1,4 @@
+import 'package:bili_music_r/src/rust/api/modules.dart';
 import 'package:bili_music_r/src/rust/api/query.dart';
 import 'package:bili_music_r/src/rust/api/task_handler.dart';
 import 'package:intl/intl.dart';
@@ -20,7 +21,7 @@ class QueryTaskView extends StatefulWidget {
 }
 
 class _CreatTaskView extends State<QueryTaskView> {
-  VideoInfoFlutter? result;
+  BasicInfo? result;
   String inputText = "";
 
   // query
@@ -29,10 +30,14 @@ class _CreatTaskView extends State<QueryTaskView> {
       showSnackBar("Cannot query with blank");
       return;
     }
-    final video = await queryBiliInfo(input: id);
-    setState(() {
-      result = video;
-    });
+    try {
+      final video = await queryBiliInfo(input: id);
+      setState(() {
+        result = video;
+      });
+    } catch (e) {
+      showSnackBar(e.toString());
+    }
     // TODO: Loading animate, error check
   }
 
@@ -149,11 +154,11 @@ class _CreatTaskView extends State<QueryTaskView> {
                   title: result!.title, 
                   author: result!.author, 
                   videos: result!.count,
-                  coverUrl: result!.cover,
+                  coverUrl: result!.coverUrl,
                   onAddToList: onAddToList,
                   infoList: [
-                    {"Type": result!.tname}, {"PubAt": formatUnixTime(result!.pubdate)},
-                    {"BVID": result!.bvid}, {"AVID": result!.aid.toString()},
+                    {"PubAt": result!.pubdate}, {"id": result!.id}, 
+                    {"Tname": result!.tname},
                   ],
                 )
               ],

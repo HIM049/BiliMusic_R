@@ -22,7 +22,6 @@ class EditTempView extends StatefulWidget {
 }
 
 class _CreatTaskView extends State<EditTempView> {
-  VideoInfoFlutter? result;
   bool isWithParts = true;
   List<TempItem> tempQueue = [];
   RangeValues range = RangeValues(0, 1);

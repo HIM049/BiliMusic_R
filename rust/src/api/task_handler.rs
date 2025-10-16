@@ -19,7 +19,7 @@ impl TempItem {
 }
 
 
-// convert current item to temp queue
+// create temp list from current item
 pub async fn create_temp_queue_from_current() -> Result<(), String> {
     let mut app_state = APP_STATE.lock().await;
     match app_state.current_item.clone() {
@@ -29,7 +29,9 @@ pub async fn create_temp_queue_from_current() -> Result<(), String> {
             Ok(())
         },
         crate::app_state::Items::Collection(collection) => {
-            todo!()
+            let queue = Task::from_collection(collection).await;
+            app_state.temp_task_queue = queue;
+            Ok(())
         },
         crate::app_state::Items::None => Err("No target".to_string()),
     }

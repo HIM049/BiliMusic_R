@@ -1,6 +1,6 @@
 use bilibili::modules::Video;
 
-use crate::app_state::APP_STATE;
+use crate::{api::modules::BasicInfo, app_state::{self, APP_STATE}, query_handler::{query_bili_handler, query_parser}, task_modules::Task};
 
 
 #[flutter_rust_bridge::frb(init)]
@@ -11,15 +11,20 @@ pub fn init_app() {
 
 // #[flutter_rust_bridge::frb(sync)] // Synchronous mode
 // Query video info, set current item
-pub async fn query_bili_info(input: String) -> Result<VideoInfoFlutter, String> {
-    if let Ok(video) = Video::from_bvid(input).await {
-        let mut app_state = APP_STATE.lock().await;
-        app_state.current_item = crate::app_state::Items::Video(video.clone());
-
-        Ok(VideoInfoFlutter::from_video(video))
-    } else {
-        Err("Failed to query".into())
+pub async fn query_bili_info(input: String) -> Result<BasicInfo, String> {
+    // parse and query info
+    if let Err(e) = query_bili_handler(query_parser(input)?).await {
+        return Err(e)
     }
+
+    // get current item
+    let app_state = APP_STATE.lock().await;
+    match app_state.current_item.clone() {
+        app_state::Items::Video(video) => Ok(BasicInfo::from_video(video)),
+        app_state::Items::Collection(collection) => Ok(BasicInfo::from_collection(collection)),
+        app_state::Items::None => Err("none item there".to_string()),
+    }
+
 }
 
 #[flutter_rust_bridge::frb(mirror(VideoInfoFlutter))]

@@ -254,6 +254,7 @@ pub struct CollectionInfo {
     pub cover: String,
     pub ctime: i64,
     pub count: i64, // media_count
+    pub desc: String,
 }
 
 impl CollectionInfo {
@@ -267,6 +268,7 @@ impl CollectionInfo {
                 cover: json["cover"].as_str()?.to_string(), 
                 ctime: json["ctime"].as_i64()?, 
                 count: json["media_count"].as_i64()?,
+                desc: json["intro"].as_str()?.to_string(),
             }
         )
     }
