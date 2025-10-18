@@ -10,6 +10,16 @@ impl Collection {
         
         Ok(Collection::from_json(value["data"].clone()).ok_or(anyhow!("failed when deserialization response"))?)
     }
+    pub async fn get_complete_collection(&self) -> Result<Self, anyhow::Error> {
+        let value = get_collection_list(self.info.id).await;
+
+        match value {
+            Ok(medias) => {
+                Ok(Self { info: self.info.clone(), upper: self.upper.clone(), medias: Some(medias) })
+            },
+            Err(e) => Err(e),
+        }
+    }
 }
 
 async fn get_collection_details(mid: i64, ps: i64, pn: i64, sessdata: String) -> Result<Value, anyhow::Error> {
@@ -58,17 +68,40 @@ pub async fn get_collection_list(mid: i64) -> Result<Vec<CollectionMedia>, anyho
     let mut media_list: Vec<CollectionMedia> = vec![];
 
     loop {
-        let value = get_collection_details(mid, 20, index, "".to_string()).await?;
-        if let Some(medias) = value["data"]["medias"].as_array() {
-            for media in medias.iter() {
-                if let Some(media) = CollectionMedia::from_json(media.clone()) {
-                    media_list.push(media);
+        let result = get_collection_details(mid, 20, index, "".to_string()).await;
+        match result {
+            Ok(j) => {
+                if let Some(medias) = j["data"]["medias"].as_array() {
+                    for media in medias.iter() {
+                        if let Some(media) = CollectionMedia::from_json(media.clone()) {
+                            media_list.push(media);
+                        }
+                    }
+                } else {
+                    // println!("finished collect");
+                    break;
                 }
-            }
-        } else {
-            break;
+            },
+            Err(e) => {
+                println!("Finish because error: {}", e);
+                break;
+            },
         }
         index += 1;
     }
-    Ok(media_list)
+    Ok(filter_invalid(media_list))
+}
+
+fn filter_invalid(list: Vec<CollectionMedia>) -> Vec<CollectionMedia> {
+    list.iter()
+        .filter(|&media| media.attr)
+        .cloned()
+        .collect()
+}
+
+fn filter_uninvalid(list: Vec<CollectionMedia>) -> Vec<CollectionMedia> {
+    list.iter()
+        .filter(|&media| !media.attr)
+        .cloned()
+        .collect()
 }

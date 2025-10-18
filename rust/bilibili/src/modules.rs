@@ -71,8 +71,6 @@ impl PlayerInfo {
         let mut subtitles: Vec<Subtitle> = Vec::new();
         for subtitle_json in json["subtitle"]["subtitles"].as_array().unwrap() {
             if let Some(sub) = Subtitle::from_json(subtitle_json.clone()) {
-        println!("单列表项{:?}", sub);
-
                 if sub.subtitle_type == 0 {
                     // uploaded by user (not by ai)
                     subtitles.push(sub);
@@ -231,7 +229,7 @@ impl AudioQuality {
 pub struct Collection {
     pub info: CollectionInfo,
     pub upper: Upper,
-    // medias:
+    pub medias: Option<Vec<CollectionMedia>>,
 }
 
 impl Collection {
@@ -240,6 +238,7 @@ impl Collection {
             Collection { 
                 info: CollectionInfo::from_json(json["info"].clone())?, 
                 upper: Upper::from_json(json["info"]["upper"].clone())?, 
+                medias: None,
             }
         )
     }
@@ -275,33 +274,33 @@ impl CollectionInfo {
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
-pub enum CollectionMediaType {
+pub enum MediaType {
     Video,
     Audio,
-    List,
+    Playlist,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct CollectionMedia {
-    id: i64, // av / au / list id
-    media_type: CollectionMediaType, // 2: video, 12, audio, 21: list
-    attr: bool,
-    bvid: String,
-    title: String,
-    cover: String,
-    intro: String,
-    page: i64,
-    duration: i64,
-    upper: Upper,
+    pub id: i64, // av / au / list id
+    pub media_type: MediaType, // 2: video, 12, audio, 21: list
+    pub attr: bool,
+    pub bvid: String,
+    pub title: String,
+    pub cover: String,
+    pub intro: String,
+    pub page: i64,
+    pub duration: i64,
+    pub upper: Upper,
 }
 
 impl CollectionMedia {
     pub fn from_json(json: Value) -> Option<CollectionMedia> {
         let vtype = match json["id"].as_i64()? {
-            2 => CollectionMediaType::Video,
-            12 => CollectionMediaType::Audio,
-            21 => CollectionMediaType::List,
-            _ => CollectionMediaType::Video,
+            2 => MediaType::Video,
+            12 => MediaType::Audio,
+            21 => MediaType::Playlist,
+            _ => MediaType::Video,
         };
 
         Some(

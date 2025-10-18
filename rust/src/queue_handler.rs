@@ -15,13 +15,16 @@ pub fn task_queue_filter(queue: Vec<Task>, options: FilterOptions) -> Vec<Task> 
         filtered = filter_by_parts(filtered.clone())
     }
 
-    filter_by_range(filtered, options.from.try_into().unwrap(), options.to.try_into().unwrap())
+    filter_by_range(filtered, options.from as usize, options.to as usize)
 
 }
 
 pub fn filter_by_parts(queue: Vec<Task>) -> Vec<Task> {
     queue.iter()
-        .filter(|task| task.part_id == 0)
+        .filter(|task| match task {
+            Task::Video(v) => v.part_id == 0,
+            Task::Audio => true,
+        })
         .cloned()
         .collect()
 }

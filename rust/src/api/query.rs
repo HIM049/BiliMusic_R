@@ -20,9 +20,9 @@ pub async fn query_bili_info(input: String) -> Result<BasicInfo, String> {
     // get current item
     let app_state = APP_STATE.lock().await;
     match app_state.current_item.clone() {
-        app_state::Items::Video(video) => Ok(BasicInfo::from_video(video)),
-        app_state::Items::Collection(collection) => Ok(BasicInfo::from_collection(collection)),
-        app_state::Items::None => Err("none item there".to_string()),
+        app_state::MediaItems::Video(video) => Ok(BasicInfo::from_video(video)),
+        app_state::MediaItems::Collection(collection) => Ok(BasicInfo::from_collection(collection)),
+        app_state::MediaItems::None => Err("none item there".to_string()),
     }
 
 }

@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:bili_music_r/components/mini_card.dart';
-import 'package:bili_music_r/src/rust/api/query.dart';
 import 'package:bili_music_r/src/rust/api/task_handler.dart';
 import 'package:bili_music_r/src/rust/queue_handler.dart';
 import 'package:flutter/material.dart';
@@ -53,7 +52,7 @@ class _CreatTaskView extends State<EditTempView> {
     final length = await getTempQueueLength();
     setState(() {
       tempLength = length-1;
-      range = RangeValues(0, (tempLength).toDouble());
+      range = RangeValues(0, (max(tempLength, 1)).toDouble());
     });
   }
 

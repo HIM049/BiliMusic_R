@@ -6,7 +6,7 @@ use crate::task_modules::Task;
 
 pub static APP_STATE: Lazy<Mutex<AppState>> = Lazy::new(|| {
     Mutex::new(AppState {
-        current_item: Items::None,
+        current_item: MediaItems::None,
         task_queue: vec![],
         temp_task_queue: vec![],
     })
@@ -14,13 +14,13 @@ pub static APP_STATE: Lazy<Mutex<AppState>> = Lazy::new(|| {
 
 #[derive(Debug, Clone)]
 pub struct AppState {
-    pub current_item: Items,
+    pub current_item: MediaItems,
     pub task_queue: Vec<Task>,
     pub temp_task_queue: Vec<Task>,
 }
 
 #[derive(Debug, Clone)]
-pub enum Items {
+pub enum MediaItems {
     Video(Video),
     Collection(Collection),
     None

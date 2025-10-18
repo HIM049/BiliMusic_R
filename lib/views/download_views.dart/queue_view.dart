@@ -24,9 +24,7 @@ class _QueueView extends State<QueueView> {
   }
 
   Future<void> getQueue() async {
-    print("get");
     final queue = await getTaskQueue();
-    print(queue);
     setState(() {
       taskQueue = queue;
     });
@@ -71,39 +69,42 @@ class _QueueView extends State<QueueView> {
         ],
       ),
       body: Center(
-        child: Column(
-          children: [
-            if (taskQueue.isNotEmpty)
-              Expanded(
-                child: SlidableAutoCloseBehavior(
-                  child: ListView(
-                    children: List.generate(taskQueue.length, (index) => MiniCard(
-                      title: taskQueue[index].title, 
-                      coverUrl: taskQueue[index].coverUrl,
-                      labels: [taskQueue[index].partTitle],
-                    ))
-                    // [
-                    //   SlidableItem(
-                    //     listItemBuilder: (context) => Card(
-                    //       child: ListTile(
-                    //         title: Text("MusicTitle"),
-                    //         subtitle: Text("by KAFU"),
-                    //         isThreeLine: true,
-                    //         trailing: IconButton(
-                    //           icon: Icon(Icons.more_horiz_rounded), 
-                    //           onPressed: (){ Slidable.of(context)?.openStartActionPane(); },
-                    //         ),
-                    //       ),
-                    //     ),
-                    //     deleteClicked: (context){},
-                    //   )
-                    // ]
+        child: Padding(
+          padding: EdgeInsetsGeometry.symmetric(horizontal: 16),
+          child: Column(
+            children: [
+              if (taskQueue.isNotEmpty)
+                Expanded(
+                  child: SlidableAutoCloseBehavior(
+                    child: ListView(
+                      children: List.generate(taskQueue.length, (index) => MiniCard(
+                        title: taskQueue[index].title, 
+                        coverUrl: taskQueue[index].coverUrl,
+                        labels: [taskQueue[index].partTitle],
+                      ))
+                      // [
+                      //   SlidableItem(
+                      //     listItemBuilder: (context) => Card(
+                      //       child: ListTile(
+                      //         title: Text("MusicTitle"),
+                      //         subtitle: Text("by KAFU"),
+                      //         isThreeLine: true,
+                      //         trailing: IconButton(
+                      //           icon: Icon(Icons.more_horiz_rounded), 
+                      //           onPressed: (){ Slidable.of(context)?.openStartActionPane(); },
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     deleteClicked: (context){},
+                      //   )
+                      // ]
+                    ),
                   ),
-                ),
-              )
-            else
-              Text("nothing")
-          ],
+                )
+              else
+                Text("nothing")
+            ],
+          ),
         )
       ),
       floatingActionButton: widget.isDesktopMode ? FloatingActionButton.extended(

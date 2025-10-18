@@ -1,5 +1,4 @@
-
-use crate::{app_state::{self, APP_STATE}, queue_handler::{task_queue_filter, FilterOptions}, task_modules::Task};
+use crate::{app_state::{self, MediaItems, APP_STATE}, queue_handler::{task_queue_filter, FilterOptions}, task_modules::Task};
 
 #[flutter_rust_bridge::frb(mirror(TempItem))]
 pub struct TempItem {
@@ -10,10 +9,15 @@ pub struct TempItem {
 
 impl TempItem {
     fn from_task(task: Task) -> Self {
-        Self { 
-            title: task.video.info.title, 
-            part_title: task.part_data.title, 
-            cover_url: task.video.info.pic 
+        match task {
+            Task::Video(video_task) => {
+                Self { 
+                    title: video_task.video.info.title, 
+                    part_title: video_task.part_data.title, 
+                    cover_url: video_task.video.info.pic 
+                }
+            },
+            Task::Audio => todo!(),
         }
     }
 }
@@ -23,24 +27,29 @@ impl TempItem {
 pub async fn create_temp_queue_from_current() -> Result<(), String> {
     let mut app_state = APP_STATE.lock().await;
     match app_state.current_item.clone() {
-        crate::app_state::Items::Video(video) => {
+        crate::app_state::MediaItems::Video (video) => {
             let queue = Task::from_video(video);
             app_state.temp_task_queue = queue;
             Ok(())
         },
-        crate::app_state::Items::Collection(collection) => {
-            let queue = Task::from_collection(collection).await;
-            app_state.temp_task_queue = queue;
-            Ok(())
+        crate::app_state::MediaItems::Collection(collection) => {
+            let result = Task::from_collection(collection).await;
+            match result {
+                Ok(queue) => {
+                    app_state.temp_task_queue = queue;
+                    Ok(())
+                },
+                Err(e) => Err(e.to_string()),
+            }
         },
-        crate::app_state::Items::None => Err("No target".to_string()),
+        crate::app_state::MediaItems::None => Err("ERROR: Current item is empty".to_string()),
     }
 }
 
 // get length of temp queue
 pub async fn get_temp_queue_length() -> i32 {
     let app_state = APP_STATE.lock().await;
-    app_state.temp_task_queue.len().try_into().unwrap()
+    app_state.temp_task_queue.len() as i32
 }
 
 // get list of temp queue
@@ -55,12 +64,8 @@ pub async fn get_temp_queue(options: FilterOptions) -> Vec<TempItem> {
 pub async fn creat_tasks_from_temp(options: FilterOptions) {
     let mut app_state = APP_STATE.lock().await;
 
-    print!("option: {:?}", options);
-    print!("temp length: {}", app_state.temp_task_queue.len());
     let new_queue = task_queue_filter(app_state.temp_task_queue.clone(), options);
-    print!("new_queue: {} ", new_queue.len());
     app_state.task_queue.extend(new_queue); 
-    println!("task queue length: {}", app_state.task_queue.len());
 }
 
 // get task queue

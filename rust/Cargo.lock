@@ -1914,6 +1914,7 @@ dependencies = [
 name = "rust_lib_bili_music_r"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "bilibili",
  "flutter_rust_bridge",
  "once_cell",

@@ -49,7 +49,7 @@ pub async fn query_bili_handler(query: QueryType) -> Result<(), String> {
             let video = Video::from_bvid(bvid).await;
             match video {
                 Ok(v) => {
-                    app_state.current_item = app_state::Items::Video(v); 
+                    app_state.current_item = app_state::MediaItems::Video(v); 
                     Ok(())
                 },
                 Err(e) => Err(e.to_string()),
@@ -59,7 +59,7 @@ pub async fn query_bili_handler(query: QueryType) -> Result<(), String> {
             let collect = Collection::from_mid(mid).await;
             match collect {
                 Ok(c) => {
-                    app_state.current_item = app_state::Items::Collection(c);
+                    app_state.current_item = app_state::MediaItems::Collection(c);
                     Ok(())
                 },
                 Err(e) => Err(e.to_string()),
