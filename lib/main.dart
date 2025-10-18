@@ -6,12 +6,28 @@ import 'package:bili_music_r/views/space_view.dart';
 import 'package:flutter/material.dart';
 import 'package:bili_music_r/src/rust/frb_generated.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:window_manager/window_manager.dart';
 
 Future<void> main() async {
   await RustLib.init();
+  WidgetsFlutterBinding.ensureInitialized();
+  await windowManager.ensureInitialized();
+
+  WindowOptions windowOptions = const WindowOptions(
+    size: Size(800, 600), // init size
+    center: true,
+    
+    maximumSize: Size(800, 800), // max size
+  );
+
+  windowManager.waitUntilReadyToShow(windowOptions, () async {
+    await windowManager.show();
+    await windowManager.focus();
+  });
+
   runApp(
     ProviderScope(child: MyApp())
-  );
+  );  
 }
 
 class MyApp extends StatelessWidget {
